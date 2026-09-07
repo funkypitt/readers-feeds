@@ -28,10 +28,14 @@ class SettingsProvider extends ChangeNotifier {
   Future<void> toggleSerif() async { serif = !serif; await _service.setBool('serif', serif); notifyListeners(); }
   Future<void> togglePagedList() async { pagedList = !pagedList; await _service.setBool('paged_list', pagedList); notifyListeners(); }
 
-  Future<void> initFontSize(BuildContext context) async {
-    if (!_fontSizeIsAuto) return;
-    fontSize = SettingsService.computeAdaptiveFontSize(context);
-    notifyListeners();
+  /// Called from the home screen's build once the window has a size: the first frame on
+  /// Android can report a zero size, so the value is re-checked until it settles.
+  void applyAuto(double shortestSideDp) {
+    if (!_fontSizeIsAuto || shortestSideDp <= 0) return;
+    final auto = SettingsService.autoFor(shortestSideDp);
+    if (auto == fontSize) return;
+    fontSize = auto;
+    WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
   }
 
   Future<void> increaseFontSize() async {

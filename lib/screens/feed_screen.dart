@@ -24,7 +24,6 @@ class _FeedScreenState extends State<FeedScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SettingsProvider>().initFontSize(context);
       _initialRefresh();
     });
   }
@@ -77,6 +76,7 @@ class _FeedScreenState extends State<FeedScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final feed = context.watch<FeedProvider>();
+    context.read<SettingsProvider>().applyAuto(MediaQuery.sizeOf(context).shortestSide);
     final st = ReaderStyle.of(context);
     final String title;
     if (feed.isLoading && feed.articles.isEmpty) {

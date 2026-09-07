@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,13 +27,9 @@ class SettingsService {
   }
 
   /// The Reader's rule: the shortest side in dp over 20, kept between 17 and 24.
-  static double computeAdaptiveFontSize(BuildContext context) {
-    // From the window itself, not the widget tree: the first frame's MediaQuery can be stale.
-    final view = View.of(context);
-    final size = view.physicalSize / view.devicePixelRatio;
-    final shortest = min(size.width, size.height);
-    return (shortest / 20).clamp(17.0, 24.0).roundToDouble();
-  }
+  static double autoFor(double shortestSideDp) => (shortestSideDp / 20).clamp(17.0, 24.0).roundToDouble();
+
+  static double computeAdaptiveFontSize(BuildContext context) => autoFor(MediaQuery.sizeOf(context).shortestSide);
 
   Future<bool> getBool(String key, bool fallback) async {
     final prefs = await SharedPreferences.getInstance();
