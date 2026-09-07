@@ -48,10 +48,11 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
   void _paginate(ReaderStyle st, double w, double h) {
     if (_extracted == null) return;
     final body = st.text(st.base, height: 1.6);
-    final titleTp = TextPainter(text: TextSpan(text: _extracted!.title, style: st.text(st.title, height: 1.25)), textDirection: TextDirection.ltr)..layout(maxWidth: w);
+    final scaler = MediaQuery.textScalerOf(context);
+    final titleTp = TextPainter(text: TextSpan(text: _extracted!.title, style: st.text(st.title, height: 1.25)), textDirection: TextDirection.ltr, textScaler: scaler)..layout(maxWidth: w);
     final headerH = titleTp.height + 14 + 1 + 14; // title, gap, rule, gap
     titleTp.dispose();
-    final pages = _paginator.paginate(text: _extracted!.content, width: w, firstPageHeight: h - headerH, pageHeight: h, style: body);
+    final pages = _paginator.paginate(text: _extracted!.content, width: w, firstPageHeight: h - headerH, pageHeight: h, style: body, textScaler: scaler);
     final progress = _pages.isEmpty ? 0.0 : _page / _pages.length;
     _pages = pages;
     _page = pages.length > 1 ? (progress * pages.length).round().clamp(0, pages.length - 1) : 0;

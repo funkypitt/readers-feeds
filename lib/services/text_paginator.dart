@@ -11,6 +11,7 @@ class TextPaginator {
     required double firstPageHeight,
     required double pageHeight,
     required TextStyle style,
+    TextScaler textScaler = TextScaler.noScaling,
   }) {
     if (text.trim().isEmpty) return [''];
     if (width <= 0 || pageHeight <= 0) return [text];
@@ -27,6 +28,7 @@ class TextPaginator {
       final tp = TextPainter(
         text: TextSpan(text: remaining, style: style),
         textDirection: TextDirection.ltr,
+        textScaler: textScaler,
       );
       tp.layout(maxWidth: width);
 

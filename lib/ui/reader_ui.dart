@@ -18,10 +18,11 @@ class ReaderStyle {
   double get title => base + 3; // article titles, screen titles
   double get small => base - 3; // secondary lines
   double get big => base * 2.2;
-  String? get family => serif ? 'serif' : null;
+  // Explicit face and spacing: the widget and the measuring painter must wrap identically.
+  String get family => serif ? 'serif' : 'Roboto';
 
   TextStyle text(double size, {Color? color, double height = 1.25, FontWeight weight = FontWeight.w300}) =>
-      TextStyle(fontSize: size, color: color ?? fg, height: height, fontWeight: weight, fontFamily: family, decoration: TextDecoration.none);
+      TextStyle(fontSize: size, color: color ?? fg, height: height, fontWeight: weight, fontFamily: family, letterSpacing: 0, wordSpacing: 0, decoration: TextDecoration.none, leadingDistribution: TextLeadingDistribution.even);
 
   static ReaderStyle of(BuildContext context) {
     final s = context.watch<SettingsProvider>();
