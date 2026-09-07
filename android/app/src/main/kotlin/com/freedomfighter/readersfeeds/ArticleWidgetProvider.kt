@@ -1,4 +1,4 @@
-package com.pluralis.pluralis
+package com.freedomfighter.readersfeeds
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -12,8 +12,8 @@ import android.widget.RemoteViews
 class ArticleWidgetProvider : AppWidgetProvider() {
 
     companion object {
-        const val ACTION_OPEN_ARTICLE = "com.pluralis.pluralis.ACTION_OPEN_ARTICLE"
-        const val EXTRA_URL = "com.pluralis.pluralis.EXTRA_URL"
+        const val ACTION_OPEN_ARTICLE = "com.freedomfighter.readersfeeds.ACTION_OPEN_ARTICLE"
+        const val EXTRA_URL = "com.freedomfighter.readersfeeds.EXTRA_URL"
     }
 
     override fun onUpdate(

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="pluralis"
+        android:label="Reader's Feeds"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -38,7 +38,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.pluralis.pluralis.ACTION_OPEN_ARTICLE" />
+                <action android:name="com.freedomfighter.readersfeeds.ACTION_OPEN_ARTICLE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

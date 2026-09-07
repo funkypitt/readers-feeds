@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import '../ui/reader_ui.dart';
 
 class SubstackLoginScreen extends StatefulWidget {
   const SubstackLoginScreen({super.key});
@@ -44,71 +45,18 @@ class _SubstackLoginScreenState extends State<SubstackLoginScreen> {
     }
   }
 
-  void _showPasteDialog() {
-    final ctrl = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Paste cookie value'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'The substack.sid cookie is HttpOnly and cannot be read '
-              'from the page. Open your browser DevTools → Application '
-              '→ Cookies, find "substack.sid", and paste its value below.',
-              style: TextStyle(fontSize: 13),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: ctrl,
-              decoration: const InputDecoration(
-                labelText: 'substack.sid value',
-                hintText: 'Paste cookie value here',
-              ),
-              maxLines: 2,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () {
-              final value = ctrl.text.trim();
-              if (value.isNotEmpty) {
-                Navigator.pop(ctx); // close dialog
-                Navigator.pop(context, value); // return to caller
-              }
-            },
-            child: const Text('Save'),
-          ),
-        ],
-      ),
-    );
+  Future<void> _paste() async {
+    final value = await textPrompt(context, 'the substack.sid cookie is HttpOnly and cannot be read from the page. In a desktop browser: DevTools › Application › Cookies › substack.sid, paste its value here.', hint: 'substack.sid', ok: 'save');
+    if (value != null && value.trim().isNotEmpty && mounted) Navigator.pop(context, value.trim());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Substack Sign In'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.content_paste),
-            tooltip: 'Paste cookie',
-            onPressed: _showPasteDialog,
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          if (_loading) const LinearProgressIndicator(),
-        ],
-      ),
+    return ReaderPage(
+      child: Column(children: [
+        ScreenTitle(_loading ? 'Substack sign-in · …' : 'Substack sign-in', onBack: () => Navigator.pop(context), trailing: 'paste', onTrailing: _paste),
+        Expanded(child: WebViewWidget(controller: _controller)),
+      ]),
     );
   }
 }

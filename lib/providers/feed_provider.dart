@@ -74,7 +74,7 @@ class FeedProvider extends ChangeNotifier {
   }
 
   static const _widgetChannel =
-      MethodChannel('com.pluralis.pluralis/widget');
+      MethodChannel('com.freedomfighter.readersfeeds/widget');
 
   /// Push latest articles to the Android home screen widget.
   Future<void> _updateHomeWidget(List<Article> articles) async {

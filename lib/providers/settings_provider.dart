@@ -4,7 +4,9 @@ import '../services/settings_service.dart';
 class SettingsProvider extends ChangeNotifier {
   double fontSize = 17.0;
   bool _fontSizeIsAuto = true;
-  bool einkMode = false;
+  bool dark = false;      // white on black
+  bool serif = false;     // reading face
+  bool pagedList = false; // lists turn pages instead of scrolling (e-ink)
 
   final SettingsService _service = SettingsService();
 
@@ -16,9 +18,15 @@ class SettingsProvider extends ChangeNotifier {
       fontSize = saved;
       _fontSizeIsAuto = false;
     }
-    einkMode = await _service.getEinkMode();
+    dark = await _service.getBool('dark', false);
+    serif = await _service.getBool('serif', false);
+    pagedList = await _service.getBool('paged_list', false);
     notifyListeners();
   }
+
+  Future<void> toggleDark() async { dark = !dark; await _service.setBool('dark', dark); notifyListeners(); }
+  Future<void> toggleSerif() async { serif = !serif; await _service.setBool('serif', serif); notifyListeners(); }
+  Future<void> togglePagedList() async { pagedList = !pagedList; await _service.setBool('paged_list', pagedList); notifyListeners(); }
 
   Future<void> initFontSize(BuildContext context) async {
     if (!_fontSizeIsAuto) return;
@@ -50,9 +58,4 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleEinkMode() async {
-    einkMode = !einkMode;
-    await _service.setEinkMode(einkMode);
-    notifyListeners();
-  }
 }

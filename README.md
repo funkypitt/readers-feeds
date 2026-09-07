@@ -1,42 +1,40 @@
-# Pluralis
+# Reader's Feeds
 
-**E-ink friendly RSS/Atom reader for Android** — a lightweight, local-first feed reader with a paginated reading mode designed for e-ink displays.
+A black-and-white, text-only RSS and Atom reader for Android, in the family of
+[Reader's Launcher](https://github.com/funkypitt/readers-launcher),
+[Reader's Tasks](https://github.com/funkypitt/readers-tasks-android) and
+[Reader's Calendar](https://github.com/funkypitt/readers-calendar). Born from
+[Pluralis](https://github.com/funkypitt/pluralis), whose fetching, extraction and
+pagination it keeps; everything you see was redrawn.
 
-## Features
+One list: the latest articles of your sources, title in black, source and age in grey.
+Tap to read the article as pages, extracted from the web page and cut at whole lines: the
+right half of the screen turns forward, the left half back. Long-press an article to save
+it for later, open it in the browser or share it. The ⋯ menu leads to the sources, the saved
+articles, the settings, and flips white on black. No icons, no colours, no cards.
 
-- **E-ink reading mode** — paginated article reader with adaptive font sizing, serif typography, tap zones for page turns, and high-contrast layout optimized for e-paper displays
-- **RSS/Atom aggregator** — subscribe to any RSS or Atom feed, sorted chronologically with source spreading
-- **Bookmarks** — save articles for later, auto-cleaned after 90 days
-- **OPML import/export** — import your existing feed subscriptions, export to share
-- **Substack support** — paid Substack content via cookie authentication, CSV import/export
-- **Fully local** — no accounts, no tracking, no server; all data stays on your device
+## Sources
 
-## Getting started
+Any RSS or Atom feed. Paid Substack publications work after signing in (the cookie stays on
+the device). OPML import and export, and a CSV of your Substacks with their cookies, so the
+list travels between devices. Tap the box to enable or disable a source, its name to see its
+own articles, long-press for the rest.
 
-The app ships with a single demo feed (Wikipedia Featured Articles). Add your own sources:
+## E-ink
 
-- **Add RSS** — tap "Add source" and enter any RSS/Atom URL
-- **Import OPML** — tap the import/export icon in the Sources tab to import an OPML file from another reader
-- **Import Substacks** — import paid Substack subscriptions with cookies via CSV
+Everything is two colours and no animation. In the settings, "pages" makes the lists turn
+pages instead of scrolling. The reading face can be serif. The text size starts from the
+screen size and can be pushed in either direction from the settings or the reader's menu.
 
-## Tech stack
+## Home-screen widget
 
-- Flutter (Android, min SDK 21)
-- Provider — state management
-- sqflite — local bookmarks database
-- xml — RSS/Atom parsing
-- shared_preferences — source state persistence
-- google_fonts — Merriweather for the e-ink reader
+The latest titles as a plain list, source under each; tap one to open it.
 
-## Build
+## Install
 
-```bash
-git clone https://github.com/funkypitt/pluralis.git
-cd pluralis
-flutter pub get
-flutter build apk --release
-```
+From the [F-Droid repo](https://funkypitt.github.io/fdroid-repo/) or the APK attached to a
+release. Build: `flutter pub get && flutter build apk --release`.
 
-## License
+## Licence
 
-[GPL-3.0](LICENSE)
+GPL-3.0, as Pluralis.

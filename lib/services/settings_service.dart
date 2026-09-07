@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsService {
   static const _kFontSize = 'reader_font_size';
   static const _kFontSizeSet = 'reader_font_size_set';
-  static const _kEinkMode = 'eink_mode';
 
   // ── font size ──────────────────────────────────────────────
 
@@ -28,26 +27,22 @@ class SettingsService {
     await prefs.setBool(_kFontSizeSet, false);
   }
 
+  /// The Reader's rule: the shortest side in dp over 20, kept between 17 and 24.
   static double computeAdaptiveFontSize(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final ratio = mq.devicePixelRatio;
-    final widthPx = mq.size.width * ratio;
-    final heightPx = mq.size.height * ratio;
-    final diagPx = sqrt(widthPx * widthPx + heightPx * heightPx);
-
-    final computed = diagPx / 130.0;
-    return computed.clamp(13.0, 30.0).roundToDouble();
+    // From the window itself, not the widget tree: the first frame's MediaQuery can be stale.
+    final view = View.of(context);
+    final size = view.physicalSize / view.devicePixelRatio;
+    final shortest = min(size.width, size.height);
+    return (shortest / 20).clamp(17.0, 24.0).roundToDouble();
   }
 
-  // ── e-ink mode ─────────────────────────────────────────────
-
-  Future<bool> getEinkMode() async {
+  Future<bool> getBool(String key, bool fallback) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_kEinkMode) ?? false;
+    return prefs.getBool(key) ?? fallback;
   }
 
-  Future<void> setEinkMode(bool value) async {
+  Future<void> setBool(String key, bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_kEinkMode, value);
+    await prefs.setBool(key, value);
   }
 }

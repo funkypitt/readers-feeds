@@ -1,7 +1,7 @@
-name: pluralis
-description: Alternative news aggregator — EN & FR RSS feeds
+name: readers_feeds
+description: "Reader's Feeds — black-and-white, text-only RSS reader"
 publish_to: 'none'
-version: 1.5.1+2007
+version: 1.0.0+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -41,8 +41,6 @@ dependencies:
   # Relative time display
   timeago: ^3.6.1
 
-  # Serif font for e-ink reader
-  google_fonts: ^6.1.0
 
   # WebView for Substack login
   webview_flutter: ^4.13.1

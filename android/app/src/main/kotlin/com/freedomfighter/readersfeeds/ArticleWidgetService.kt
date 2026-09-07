@@ -1,4 +1,4 @@
-package com.pluralis.pluralis
+package com.freedomfighter.readersfeeds
 
 import android.content.Context
 import android.content.Intent
@@ -45,7 +45,6 @@ private class ArticleRemoteViewsFactory(
 
         views.setTextViewText(R.id.item_title, article.title)
         views.setTextViewText(R.id.item_source, article.sourceName)
-        views.setTextViewText(R.id.item_description, article.description)
 
         // Fill-in intent for click handling — merged with the template
         val fillInIntent = Intent().apply {

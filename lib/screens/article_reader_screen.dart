@@ -1,18 +1,20 @@
+// The article as pages: tap the right half for the next page, the left half for the
+// previous one. Pages are cut at whole lines, never through a line. Title on the first page.
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/article.dart';
+import '../providers/bookmark_provider.dart';
 import '../providers/settings_provider.dart';
 import '../services/article_extractor_service.dart';
 import '../services/text_paginator.dart';
-import '../widgets/font_size_controls.dart';
+import '../ui/reader_ui.dart';
 
 class ArticleReaderScreen extends StatefulWidget {
   final Article article;
-
   const ArticleReaderScreen({super.key, required this.article});
-
   @override
   State<ArticleReaderScreen> createState() => _ArticleReaderScreenState();
 }
@@ -20,324 +22,128 @@ class ArticleReaderScreen extends StatefulWidget {
 class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
   final _extractor = ArticleExtractorService();
   final _paginator = TextPaginator();
-
   ExtractedArticle? _extracted;
   List<String> _pages = [];
-  int _currentPage = 0;
-  bool _isLoading = true;
+  int _page = 0;
+  bool _loading = true;
   String? _error;
-  double _lastFontSize = 0;
-  double _measuredHeight = 0;
-  double _measuredWidth = 0;
-  bool _repaginateScheduled = false;
+  // what the current pagination was computed for
+  double _forBase = 0; bool _forSerif = false; double _forW = 0, _forH = 0;
 
   @override
-  void initState() {
-    super.initState();
-    _loadArticle();
-  }
+  void initState() { super.initState(); _load(); }
 
-  Future<void> _loadArticle() async {
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
-
-    // Try RSS fullContent first, then fetch from web
-    if (widget.article.fullContent != null &&
-        widget.article.fullContent!.length > 200) {
-      _extracted = ExtractedArticle(
-        title: widget.article.title,
-        content: widget.article.fullContent!,
-        siteName: widget.article.sourceName,
-      );
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+  Future<void> _load() async {
+    final a = widget.article;
+    if (a.fullContent != null && a.fullContent!.length > 200) {
+      _extracted = ExtractedArticle(title: a.title, content: a.fullContent!, siteName: a.sourceName);
+      if (mounted) setState(() => _loading = false);
       return;
     }
-
-    final extracted = await _extractor.extract(widget.article.link);
-
+    final ex = await _extractor.extract(a.link);
     if (!mounted) return;
-
-    if (extracted == null) {
-      setState(() {
-        _isLoading = false;
-        _error = 'Could not extract article content';
-      });
-      return;
-    }
-
-    _extracted = extracted;
-    setState(() => _isLoading = false);
+    setState(() { _loading = false; _extracted = ex; if (ex == null) _error = 'the text could not be extracted'; });
   }
 
-  void _scheduleRepaginate() {
-    if (_repaginateScheduled) return;
-    _repaginateScheduled = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _repaginateScheduled = false;
-      _repaginate();
-    });
-  }
-
-  void _repaginate() {
-    if (_extracted == null || !mounted || _measuredHeight <= 0) return;
-
-    final settings = context.read<SettingsProvider>();
-
-    final style = GoogleFonts.merriweather(
-      fontSize: settings.fontSize,
-      height: 1.7,
-      color: Colors.black87,
-    );
-
-    final contentWidth = _measuredWidth - 48; // 24px padding each side
-
-    // Measure exact header height for first page
-    final titleStyle = GoogleFonts.merriweather(
-      fontSize: settings.fontSize + 4,
-      fontWeight: FontWeight.w700,
-      height: 1.3,
-      color: Colors.black,
-    );
-    final titleTp = TextPainter(
-      text: TextSpan(text: _extracted!.title, style: titleStyle),
-      textDirection: TextDirection.ltr,
-    );
-    titleTp.layout(maxWidth: contentWidth);
-    final titleHeight = titleTp.height;
+  void _paginate(ReaderStyle st, double w, double h) {
+    if (_extracted == null) return;
+    final body = st.text(st.base, height: 1.6);
+    final titleTp = TextPainter(text: TextSpan(text: _extracted!.title, style: st.text(st.title, height: 1.25)), textDirection: TextDirection.ltr)..layout(maxWidth: w);
+    final headerH = titleTp.height + 14 + 1 + 14; // title, gap, rule, gap
     titleTp.dispose();
-
-    // Header: SizedBox(8) + title + SizedBox(16) + Divider(height=16) + SizedBox(12)
-    final headerHeight = 8 + titleHeight + 16 + 16 + 12;
-    // Subtract bottom padding (16) + safety margin (8) from available height
-    final availableHeight = _measuredHeight - 24;
-    final firstPageHeight = availableHeight - headerHeight;
-    final normalPageHeight = availableHeight;
-
-    final pages = _paginator.paginate(
-      text: _extracted!.content,
-      width: contentWidth,
-      firstPageHeight: firstPageHeight,
-      pageHeight: normalPageHeight,
-      style: style,
-    );
-
-    // Preserve reading position as a fraction of total pages
-    final progress = _pages.isNotEmpty
-        ? _currentPage / _pages.length
-        : 0.0;
-    final newPage = pages.length > 1
-        ? (progress * pages.length).round().clamp(0, pages.length - 1)
-        : 0;
-
-    setState(() {
-      _pages = pages;
-      _currentPage = newPage;
-      _lastFontSize = settings.fontSize;
-    });
+    final pages = _paginator.paginate(text: _extracted!.content, width: w, firstPageHeight: h - headerH, pageHeight: h, style: body);
+    final progress = _pages.isEmpty ? 0.0 : _page / _pages.length;
+    _pages = pages;
+    _page = pages.length > 1 ? (progress * pages.length).round().clamp(0, pages.length - 1) : 0;
+    _forBase = st.base; _forSerif = st.serif; _forW = w; _forH = h;
   }
 
-  void _nextPage() {
-    if (_currentPage < _pages.length - 1) {
-      setState(() => _currentPage++);
-    }
-  }
-
-  void _prevPage() {
-    if (_currentPage > 0) {
-      setState(() => _currentPage--);
-    }
+  void _menu() {
+    final settings = context.read<SettingsProvider>();
+    final bookmarks = context.read<BookmarkProvider>();
+    final a = widget.article;
+    final saved = bookmarks.isBookmarked(a.id);
+    showTextMenu(context, title: a.title, items: [
+      MenuItemText(saved ? 'forget' : 'save for later', () => bookmarks.toggle(a)),
+      MenuItemText('open in the browser', () => launchUrl(Uri.parse(a.link), mode: LaunchMode.externalApplication)),
+      MenuItemText('share', () => Share.share('${a.title}\n${a.link}')),
+      MenuItemText('larger text', () => settings.increaseFontSize()),
+      MenuItemText('smaller text', () => settings.decreaseFontSize()),
+      MenuItemText(settings.serif ? 'sans-serif' : 'serif', () => settings.toggleSerif()),
+    ], footer: [
+      MenuItemText(settings.dark ? 'black on white' : 'white on black', () => settings.toggleDark()),
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsProvider>();
-
-    // Re-paginate if font size changed
-    if (_extracted != null && settings.fontSize != _lastFontSize && _measuredHeight > 0) {
-      _scheduleRepaginate();
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
-        title: Text(
-          widget.article.sourceName,
-          style: TextStyle(fontSize: settings.fontSize - 2),
+    final st = ReaderStyle.of(context);
+    final a = widget.article;
+    return ReaderPage(
+      child: Column(children: [
+        ScreenTitle(a.sourceName, onBack: () => Navigator.pop(context), trailing: '⋯', onTrailing: _menu),
+        Expanded(
+          child: _loading
+              ? const Padding(padding: EdgeInsets.all(kPadH), child: Small('fetching the text…'))
+              : _error != null
+                  ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Padding(padding: const EdgeInsets.all(kPadH), child: T(_error!, color: st.dim)),
+                      TextRow('open in the browser', onTap: () => launchUrl(Uri.parse(a.link), mode: LaunchMode.externalApplication)),
+                    ])
+                  : _body(st),
         ),
-        actions: [
-          const FontSizeControls(),
-          const SizedBox(width: 4),
-          IconButton(
-            icon: const Icon(Icons.open_in_browser),
-            tooltip: 'Open in browser',
-            onPressed: () => launchUrl(
-              Uri.parse(widget.article.link),
-              mode: LaunchMode.externalApplication,
-            ),
-          ),
-        ],
-      ),
-      body: _buildBody(settings),
+      ]),
     );
   }
 
-  Widget _buildBody(SettingsProvider settings) {
-    if (_isLoading) {
-      return const Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Extracting article...'),
-          ],
-        ),
-      );
-    }
-
-    if (_error != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.grey),
-              const SizedBox(height: 16),
-              Text(_error!, textAlign: TextAlign.center),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () => launchUrl(
-                  Uri.parse(widget.article.link),
-                  mode: LaunchMode.externalApplication,
-                ),
-                icon: const Icon(Icons.open_in_browser),
-                label: const Text('Open in browser'),
+  Widget _body(ReaderStyle st) {
+    return LayoutBuilder(builder: (ctx, c) {
+      final footerH = st.small * 1.25 + 28;
+      final w = c.maxWidth - 2 * kPadH;
+      final h = c.maxHeight - footerH - 16 - MediaQuery.of(ctx).padding.bottom;
+      if (_forBase != st.base || _forSerif != st.serif || _forW != w || _forH != h) _paginate(st, w, h);
+      final last = _pages.length - 1;
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapUp: (d) {
+          HapticFeedback.selectionClick();
+          final x = d.localPosition.dx;
+          if (x > c.maxWidth / 2) { if (_page < last) setState(() => _page++); }
+          else { if (_page > 0) setState(() => _page--); }
+        },
+        onHorizontalDragEnd: (d) {
+          final v = d.primaryVelocity ?? 0;
+          if (v < -100 && _page < last) setState(() => _page++);
+          if (v > 100 && _page > 0) setState(() => _page--);
+        },
+        child: Column(children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(kPadH, 16, kPadH, 0),
+              child: ClipRect(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  if (_page == 0 && _extracted != null) ...[
+                    Text(_extracted!.title, style: st.text(st.title, height: 1.25)),
+                    const SizedBox(height: 14),
+                    const Rule(),
+                    const SizedBox(height: 14),
+                  ],
+                  if (_pages.isNotEmpty)
+                    Expanded(child: Text(_pages[_page], style: st.text(st.base, height: 1.6), overflow: TextOverflow.clip)),
+                ]),
               ),
-            ],
+            ),
           ),
-        ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(kPadH, 8, kPadH, 12 + MediaQuery.of(ctx).padding.bottom),
+            child: Row(children: [
+              T('‹', size: st.small, color: _page > 0 ? st.dim : Colors.transparent),
+              Expanded(child: T(_pages.isEmpty ? '' : '${_page + 1} / ${_pages.length}', size: st.small, color: st.dim, align: TextAlign.center)),
+              T('›', size: st.small, color: _page < last ? st.dim : Colors.transparent),
+            ]),
+          ),
+        ]),
       );
-    }
-
-    final style = GoogleFonts.merriweather(
-      fontSize: settings.fontSize,
-      height: 1.7,
-      color: Colors.black87,
-    );
-
-    return GestureDetector(
-      onTapUp: (details) {
-        final width = MediaQuery.of(context).size.width;
-        if (details.globalPosition.dx < width / 3) {
-          _prevPage();
-        } else if (details.globalPosition.dx > width * 2 / 3) {
-          _nextPage();
-        }
-      },
-      onHorizontalDragEnd: (details) {
-        final velocity = details.primaryVelocity ?? 0;
-        if (velocity < -100) {
-          _nextPage();
-        } else if (velocity > 100) {
-          _prevPage();
-        }
-      },
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final sizeChanged =
-                      constraints.maxHeight != _measuredHeight ||
-                      constraints.maxWidth != _measuredWidth;
-                  if (sizeChanged) {
-                    _measuredHeight = constraints.maxHeight;
-                    _measuredWidth = constraints.maxWidth;
-                  }
-                  if (_extracted != null && _measuredHeight > 0 &&
-                      (sizeChanged || _pages.isEmpty)) {
-                    _scheduleRepaginate();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Show title only on first page
-                        if (_currentPage == 0 && _extracted != null) ...[
-                          const SizedBox(height: 8),
-                          Text(
-                            _extracted!.title,
-                            style: GoogleFonts.merriweather(
-                              fontSize: settings.fontSize + 4,
-                              fontWeight: FontWeight.w700,
-                              height: 1.3,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Divider(color: Colors.grey[300]),
-                          const SizedBox(height: 12),
-                        ],
-                        if (_pages.isNotEmpty)
-                          Expanded(
-                            child: Text(
-                              _pages[_currentPage],
-                              style: style,
-                              overflow: TextOverflow.clip,
-                            ),
-                          ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            // Page indicator
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Prev indicator
-                  Icon(
-                    Icons.chevron_left,
-                    color: _currentPage > 0
-                        ? Colors.black54
-                        : Colors.transparent,
-                  ),
-                  Text(
-                    _pages.isNotEmpty
-                        ? '${_currentPage + 1} / ${_pages.length}'
-                        : '',
-                    style: TextStyle(
-                      fontSize: settings.fontSize - 4,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  // Next indicator
-                  Icon(
-                    Icons.chevron_right,
-                    color: _currentPage < _pages.length - 1
-                        ? Colors.black54
-                        : Colors.transparent,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    });
   }
 }

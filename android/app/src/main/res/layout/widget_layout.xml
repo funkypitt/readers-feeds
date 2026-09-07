@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA">
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:id="@+id/widget_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#1A3A5C"
+        android:background="#FFFFFF"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
         android:paddingTop="10dp"
@@ -21,24 +21,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Pluralis"
-            android:textColor="#FFFFFF"
+            android:text="feeds"
+            android:textColor="#8C000000"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:fontFamily="sans-serif-light" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Open ›"
-            android:textColor="#E8A020"
-            android:textSize="12sp" />
+            android:text="open ›"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-light" />
     </LinearLayout>
 
     <ListView
         android:id="@+id/widget_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#E0E0E0"
+        android:divider="#40000000"
         android:dividerHeight="1dp"
         android:scrollbars="none" />
 
@@ -47,7 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="No articles yet.\nOpen Pluralis to refresh."
-        android:textColor="#999999"
+        android:text="nothing yet"
+        android:textColor="#8C000000"
+        android:fontFamily="sans-serif-light"
         android:textSize="14sp" />
 </LinearLayout>

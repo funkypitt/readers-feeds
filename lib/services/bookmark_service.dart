@@ -9,7 +9,7 @@ class BookmarkService {
   Future<void> init() async {
     final dbPath = await getDatabasesPath();
     _db = await openDatabase(
-      join(dbPath, 'pluralis.db'),
+      join(dbPath, 'readers_feeds.db'),
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''

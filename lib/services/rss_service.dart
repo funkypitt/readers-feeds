@@ -9,7 +9,7 @@ import '../models/source.dart';
 
 class RssService {
   static const _headers = {
-    'User-Agent': 'Mozilla/5.0 (compatible; Pluralis/1.0; RSS Reader)',
+    'User-Agent': 'Mozilla/5.0 (compatible; ReadersFeeds/1.0; RSS Reader)',
     'Accept': 'application/rss+xml, application/xml, text/xml, */*',
     'Cache-Control': 'no-cache, no-store',
     'Pragma': 'no-cache',

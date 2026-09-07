@@ -10,7 +10,7 @@ class ImportExportService {
     builder.element('opml', nest: () {
       builder.attribute('version', '2.0');
       builder.element('head', nest: () {
-        builder.element('title', nest: 'Pluralis Sources');
+        builder.element('title', nest: "Reader's Feeds sources");
       });
       builder.element('body', nest: () {
         for (final source in sources) {

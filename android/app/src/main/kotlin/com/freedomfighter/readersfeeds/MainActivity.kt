@@ -1,4 +1,4 @@
-package com.pluralis.pluralis
+package com.freedomfighter.readersfeeds
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -9,7 +9,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.pluralis.pluralis/widget")
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.freedomfighter.readersfeeds/widget")
             .setMethodCallHandler { call, result ->
                 if (call.method == "updateWidget") {
                     val manager = AppWidgetManager.getInstance(this)
