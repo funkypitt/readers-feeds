@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/l10n.dart';
 import 'package:provider/provider.dart';
 import '../models/article.dart';
 import '../providers/bookmark_provider.dart';
@@ -15,8 +16,8 @@ class SavedScreen extends StatelessWidget {
         .toList();
     return ReaderPage(
       child: Column(children: [
-        ScreenTitle('saved for later', onBack: () => Navigator.pop(context)),
-        Expanded(child: ArticleList(articles: articles, empty: 'nothing saved. Long-press an article to keep it here for 90 days.')),
+        ScreenTitle(t('saved for later'), onBack: () => Navigator.pop(context)),
+        Expanded(child: ArticleList(articles: articles, empty: t('nothing saved. Long-press an article to keep it here for 90 days.'))),
       ]),
     );
   }

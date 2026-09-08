@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/l10n.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../ui/reader_ui.dart';
 
@@ -46,7 +47,7 @@ class _SubstackLoginScreenState extends State<SubstackLoginScreen> {
   }
 
   Future<void> _paste() async {
-    final value = await textPrompt(context, 'the substack.sid cookie is HttpOnly and cannot be read from the page. In a desktop browser: DevTools › Application › Cookies › substack.sid, paste its value here.', hint: 'substack.sid', ok: 'save');
+    final value = await textPrompt(context, t('the substack.sid cookie is HttpOnly and cannot be read from the page. In a desktop browser: DevTools › Application › Cookies › substack.sid, paste its value here.'), hint: 'substack.sid', ok: t('save'));
     if (value != null && value.trim().isNotEmpty && mounted) Navigator.pop(context, value.trim());
   }
 
@@ -54,7 +55,7 @@ class _SubstackLoginScreenState extends State<SubstackLoginScreen> {
   Widget build(BuildContext context) {
     return ReaderPage(
       child: Column(children: [
-        ScreenTitle(_loading ? 'Substack sign-in · …' : 'Substack sign-in', onBack: () => Navigator.pop(context), trailing: 'paste', onTrailing: _paste),
+        ScreenTitle(_loading ? t('Substack sign-in') + ' · …' : t('Substack sign-in'), onBack: () => Navigator.pop(context), trailing: t('paste'), onTrailing: _paste),
         Expanded(child: WebViewWidget(controller: _controller)),
       ]),
     );

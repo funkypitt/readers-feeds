@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/l10n.dart';
 import '../models/article.dart';
 import '../models/source.dart';
 import '../services/rss_service.dart';
@@ -36,7 +37,7 @@ class _SourceFeedScreenState extends State<SourceFeedScreen> {
     return ReaderPage(
       child: Column(children: [
         ScreenTitle(_loading ? '${widget.source.name} · …' : widget.source.name, onBack: () => Navigator.pop(context)),
-        Expanded(child: ArticleList(articles: _articles, onRefresh: _fetch, showSource: false, empty: _loading ? '…' : 'nothing came back from this feed.')),
+        Expanded(child: ArticleList(articles: _articles, onRefresh: _fetch, showSource: false, empty: _loading ? '…' : t('nothing came back from this feed.'))),
       ]),
     );
   }

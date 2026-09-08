@@ -1,0 +1,96 @@
+// Six languages, the English text as the key. t('save for later') returns the phrase in the
+// device language, or the key itself when a language has no entry.
+import 'dart:ui';
+
+String _lang = 'en';
+
+void initL10n() {
+  final code = PlatformDispatcher.instance.locale.languageCode.toLowerCase();
+  _lang = _tables.containsKey(code) ? code : 'en';
+}
+
+String t(String key, [List<Object> args = const []]) {
+  var s = _tables[_lang]?[key] ?? key;
+  for (var i = 0; i < args.length; i++) {
+    s = s.replaceAll('%${i + 1}', args[i].toString());
+  }
+  return s;
+}
+
+const Map<String, Map<String, String>> _tables = {
+  'fr': {
+    'nothing here': 'rien ici', 'read': 'lire', 'forget': 'oublier', 'save for later': 'garder pour plus tard', 'open in the browser': 'ouvrir dans le navigateur', 'share': 'partager', 'saved': 'gardé',
+    'saved for later': 'gardés pour plus tard', 'nothing saved. Long-press an article to keep it here for 90 days.': 'rien de gardé. Appui long sur un article pour le garder ici 90 jours.',
+    'sources': 'sources', 'refresh': 'actualiser', 'order: latest first': 'ordre : les plus récents d’abord', 'order: one per source': 'ordre : un par source', 'black on white': 'noir sur blanc', 'white on black': 'blanc sur noir', 'settings': 'réglages',
+    'fetching…': 'chargement…', 'feeds': 'flux', '%1 articles · %2 sources': '%1 articles · %2 sources', 'nothing could be fetched. Pull down to try again, or check the sources.': 'rien n’a pu être chargé. Tirer vers le bas pour réessayer, ou vérifier les sources.',
+    'no source enabled. ⋯ › sources.': 'aucune source activée. ⋯ › sources.', 'nothing yet. Pull down to refresh.': 'rien pour l’instant. Tirer vers le bas pour actualiser.',
+    'add a feed': 'ajouter un flux', 'add a paid Substack': 'ajouter un Substack payant', 'import OPML': 'importer un OPML', 'export OPML': 'exporter en OPML', 'import Substacks (CSV)': 'importer des Substacks (CSV)', 'export Substacks (CSV)': 'exporter les Substacks (CSV)',
+    'address of the feed (or of the site)': 'adresse du flux (ou du site)', 'name': 'nom', 'address of the publication': 'adresse de la publication', 'no source in this file': 'aucune source dans ce fichier', '%1 sources added': '%1 sources ajoutées', 'could not import: %1': 'import impossible : %1',
+    'no paid Substack to export': 'aucun Substack payant à exporter', 'no Substack in this file': 'aucun Substack dans ce fichier', '%1 Substacks added': '%1 Substacks ajoutés', 'disable': 'désactiver', 'enable': 'activer', 'articles': 'articles', 'sign in again': 'se reconnecter', 'forget the sign-in': 'oublier la connexion', 'remove': 'retirer',
+    'no source yet. ⋯ › add a feed, or import an OPML file.': 'aucune source. ⋯ › ajouter un flux, ou importer un fichier OPML.', 'signed in': 'connecté', 'no answer': 'sans réponse', '+ add a feed': '+ ajouter un flux', 'nothing came back from this feed.': 'ce flux n’a rien renvoyé.',
+    'the substack.sid cookie is HttpOnly and cannot be read from the page. In a desktop browser: DevTools › Application › Cookies › substack.sid, paste its value here.': 'le cookie substack.sid est HttpOnly et ne peut pas être lu depuis la page. Dans un navigateur de bureau : outils de développement › Application › Cookies › substack.sid, coller sa valeur ici.',
+    'Substack sign-in': 'connexion Substack', 'paste': 'coller', 'save': 'enregistrer', 'colours': 'couleurs', 'text size — tap for larger, long-press for smaller': 'taille du texte — toucher pour agrandir, appui long pour réduire', ' · auto': ' · auto', 'back to the automatic size': 'revenir à la taille automatique', 'from the screen size': 'd’après la taille de l’écran',
+    'serif': 'serif', 'sans-serif': 'sans-serif', 'reading face': 'police de lecture', 'pages': 'pages', 'scrolling': 'défilement', 'lists — pages suit e-ink screens': 'listes — les pages conviennent aux écrans e-ink', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'un lecteur RSS en noir et blanc, né de Pluralis. GPL-3.0.',
+    'the text could not be extracted': 'le texte n’a pas pu être extrait', 'larger text': 'texte plus grand', 'smaller text': 'texte plus petit', 'fetching the text…': 'chargement du texte…', 'cancel': 'annuler', 'ok': 'ok', 'now': 'maintenant', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 j',
+  },
+  'de': {
+    'nothing here': 'nichts hier', 'read': 'lesen', 'forget': 'vergessen', 'save for later': 'für später merken', 'open in the browser': 'im Browser öffnen', 'share': 'teilen', 'saved': 'gemerkt',
+    'saved for later': 'für später gemerkt', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nichts gemerkt. Einen Artikel lange drücken, um ihn 90 Tage hier zu behalten.',
+    'sources': 'Quellen', 'refresh': 'aktualisieren', 'order: latest first': 'Reihenfolge: neueste zuerst', 'order: one per source': 'Reihenfolge: eine pro Quelle', 'black on white': 'Schwarz auf Weiß', 'white on black': 'Weiß auf Schwarz', 'settings': 'Einstellungen',
+    'fetching…': 'lade…', 'feeds': 'Feeds', '%1 articles · %2 sources': '%1 Artikel · %2 Quellen', 'nothing could be fetched. Pull down to try again, or check the sources.': 'nichts konnte geladen werden. Nach unten ziehen, um es erneut zu versuchen, oder die Quellen prüfen.',
+    'no source enabled. ⋯ › sources.': 'keine Quelle aktiv. ⋯ › Quellen.', 'nothing yet. Pull down to refresh.': 'noch nichts. Nach unten ziehen zum Aktualisieren.',
+    'add a feed': 'Feed hinzufügen', 'add a paid Substack': 'bezahlten Substack hinzufügen', 'import OPML': 'OPML importieren', 'export OPML': 'OPML exportieren', 'import Substacks (CSV)': 'Substacks importieren (CSV)', 'export Substacks (CSV)': 'Substacks exportieren (CSV)',
+    'address of the feed (or of the site)': 'Adresse des Feeds (oder der Website)', 'name': 'Name', 'address of the publication': 'Adresse der Publikation', 'no source in this file': 'keine Quelle in dieser Datei', '%1 sources added': '%1 Quellen hinzugefügt', 'could not import: %1': 'Import fehlgeschlagen: %1',
+    'no paid Substack to export': 'kein bezahlter Substack zum Exportieren', 'no Substack in this file': 'kein Substack in dieser Datei', '%1 Substacks added': '%1 Substacks hinzugefügt', 'disable': 'deaktivieren', 'enable': 'aktivieren', 'articles': 'Artikel', 'sign in again': 'erneut anmelden', 'forget the sign-in': 'Anmeldung vergessen', 'remove': 'entfernen',
+    'no source yet. ⋯ › add a feed, or import an OPML file.': 'noch keine Quelle. ⋯ › Feed hinzufügen oder eine OPML-Datei importieren.', 'signed in': 'angemeldet', 'no answer': 'keine Antwort', '+ add a feed': '+ Feed hinzufügen', 'nothing came back from this feed.': 'dieser Feed hat nichts geliefert.',
+    'the substack.sid cookie is HttpOnly and cannot be read from the page. In a desktop browser: DevTools › Application › Cookies › substack.sid, paste its value here.': 'das Cookie substack.sid ist HttpOnly und kann nicht aus der Seite gelesen werden. Im Desktop-Browser: DevTools › Application › Cookies › substack.sid, den Wert hier einfügen.',
+    'Substack sign-in': 'Substack-Anmeldung', 'paste': 'einfügen', 'save': 'speichern', 'colours': 'Farben', 'text size — tap for larger, long-press for smaller': 'Textgröße — antippen für größer, lange drücken für kleiner', ' · auto': ' · auto', 'back to the automatic size': 'zurück zur automatischen Größe', 'from the screen size': 'aus der Bildschirmgröße',
+    'serif': 'Serif', 'sans-serif': 'Sans-Serif', 'reading face': 'Leseschrift', 'pages': 'Seiten', 'scrolling': 'scrollen', 'lists — pages suit e-ink screens': 'Listen — Seiten passen zu E-Ink-Bildschirmen', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'ein schwarz-weißer RSS-Reader, aus Pluralis entstanden. GPL-3.0.',
+    'the text could not be extracted': 'der Text konnte nicht ausgelesen werden', 'larger text': 'größerer Text', 'smaller text': 'kleinerer Text', 'fetching the text…': 'lade den Text…', 'cancel': 'abbrechen', 'ok': 'ok', 'now': 'jetzt', '%1 min': '%1 Min', '%1 h': '%1 Std', '%1 d': '%1 T',
+  },
+  'es': {
+    'nothing here': 'nada aquí', 'read': 'leer', 'forget': 'olvidar', 'save for later': 'guardar para después', 'open in the browser': 'abrir en el navegador', 'share': 'compartir', 'saved': 'guardado',
+    'saved for later': 'guardados para después', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nada guardado. Mantén pulsado un artículo para guardarlo aquí 90 días.',
+    'sources': 'fuentes', 'refresh': 'actualizar', 'order: latest first': 'orden: más recientes primero', 'order: one per source': 'orden: uno por fuente', 'black on white': 'negro sobre blanco', 'white on black': 'blanco sobre negro', 'settings': 'ajustes',
+    'fetching…': 'cargando…', 'feeds': 'fuentes', '%1 articles · %2 sources': '%1 artículos · %2 fuentes', 'nothing could be fetched. Pull down to try again, or check the sources.': 'no se pudo cargar nada. Desliza hacia abajo para reintentar, o revisa las fuentes.',
+    'no source enabled. ⋯ › sources.': 'ninguna fuente activada. ⋯ › fuentes.', 'nothing yet. Pull down to refresh.': 'nada todavía. Desliza hacia abajo para actualizar.',
+    'add a feed': 'añadir un feed', 'add a paid Substack': 'añadir un Substack de pago', 'import OPML': 'importar OPML', 'export OPML': 'exportar OPML', 'import Substacks (CSV)': 'importar Substacks (CSV)', 'export Substacks (CSV)': 'exportar Substacks (CSV)',
+    'address of the feed (or of the site)': 'dirección del feed (o del sitio)', 'name': 'nombre', 'address of the publication': 'dirección de la publicación', 'no source in this file': 'ninguna fuente en este archivo', '%1 sources added': '%1 fuentes añadidas', 'could not import: %1': 'no se pudo importar: %1',
+    'no paid Substack to export': 'ningún Substack de pago que exportar', 'no Substack in this file': 'ningún Substack en este archivo', '%1 Substacks added': '%1 Substacks añadidos', 'disable': 'desactivar', 'enable': 'activar', 'articles': 'artículos', 'sign in again': 'iniciar sesión de nuevo', 'forget the sign-in': 'olvidar la sesión', 'remove': 'quitar',
+    'no source yet. ⋯ › add a feed, or import an OPML file.': 'ninguna fuente aún. ⋯ › añadir un feed, o importar un archivo OPML.', 'signed in': 'sesión iniciada', 'no answer': 'sin respuesta', '+ add a feed': '+ añadir un feed', 'nothing came back from this feed.': 'este feed no devolvió nada.',
+    'the substack.sid cookie is HttpOnly and cannot be read from the page. In a desktop browser: DevTools › Application › Cookies › substack.sid, paste its value here.': 'la cookie substack.sid es HttpOnly y no se puede leer desde la página. En un navegador de escritorio: DevTools › Application › Cookies › substack.sid, pega aquí su valor.',
+    'Substack sign-in': 'inicio de sesión Substack', 'paste': 'pegar', 'save': 'guardar', 'colours': 'colores', 'text size — tap for larger, long-press for smaller': 'tamaño del texto — toca para agrandar, mantén pulsado para reducir', ' · auto': ' · auto', 'back to the automatic size': 'volver al tamaño automático', 'from the screen size': 'según el tamaño de la pantalla',
+    'serif': 'serif', 'sans-serif': 'sans-serif', 'reading face': 'fuente de lectura', 'pages': 'páginas', 'scrolling': 'desplazamiento', 'lists — pages suit e-ink screens': 'listas — las páginas van bien en pantallas e-ink', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'un lector RSS en blanco y negro, nacido de Pluralis. GPL-3.0.',
+    'the text could not be extracted': 'no se pudo extraer el texto', 'larger text': 'texto más grande', 'smaller text': 'texto más pequeño', 'fetching the text…': 'cargando el texto…', 'cancel': 'cancelar', 'ok': 'ok', 'now': 'ahora', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 d',
+  },
+  'pt': {
+    'nothing here': 'nada aqui', 'read': 'ler', 'forget': 'esquecer', 'save for later': 'guardar para depois', 'open in the browser': 'abrir no navegador', 'share': 'partilhar', 'saved': 'guardado',
+    'saved for later': 'guardados para depois', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nada guardado. Prima longamente um artigo para o guardar aqui 90 dias.',
+    'sources': 'fontes', 'refresh': 'atualizar', 'order: latest first': 'ordem: mais recentes primeiro', 'order: one per source': 'ordem: um por fonte', 'black on white': 'preto sobre branco', 'white on black': 'branco sobre preto', 'settings': 'definições',
+    'fetching…': 'a carregar…', 'feeds': 'feeds', '%1 articles · %2 sources': '%1 artigos · %2 fontes', 'nothing could be fetched. Pull down to try again, or check the sources.': 'nada pôde ser carregado. Puxe para baixo para tentar de novo, ou verifique as fontes.',
+    'no source enabled. ⋯ › sources.': 'nenhuma fonte ativa. ⋯ › fontes.', 'nothing yet. Pull down to refresh.': 'nada ainda. Puxe para baixo para atualizar.',
+    'add a feed': 'adicionar um feed', 'add a paid Substack': 'adicionar um Substack pago', 'import OPML': 'importar OPML', 'export OPML': 'exportar OPML', 'import Substacks (CSV)': 'importar Substacks (CSV)', 'export Substacks (CSV)': 'exportar Substacks (CSV)',
+    'address of the feed (or of the site)': 'endereço do feed (ou do site)', 'name': 'nome', 'address of the publication': 'endereço da publicação', 'no source in this file': 'nenhuma fonte neste ficheiro', '%1 sources added': '%1 fontes adicionadas', 'could not import: %1': 'não foi possível importar: %1',
+    'no paid Substack to export': 'nenhum Substack pago para exportar', 'no Substack in this file': 'nenhum Substack neste ficheiro', '%1 Substacks added': '%1 Substacks adicionados', 'disable': 'desativar', 'enable': 'ativar', 'articles': 'artigos', 'sign in again': 'iniciar sessão de novo', 'forget the sign-in': 'esquecer a sessão', 'remove': 'remover',
+    'no source yet. ⋯ › add a feed, or import an OPML file.': 'nenhuma fonte ainda. ⋯ › adicionar um feed, ou importar um ficheiro OPML.', 'signed in': 'sessão iniciada', 'no answer': 'sem resposta', '+ add a feed': '+ adicionar um feed', 'nothing came back from this feed.': 'este feed não devolveu nada.',
+    'the substack.sid cookie is HttpOnly and cannot be read from the page. In a desktop browser: DevTools › Application › Cookies › substack.sid, paste its value here.': 'o cookie substack.sid é HttpOnly e não pode ser lido a partir da página. Num navegador de secretária: DevTools › Application › Cookies › substack.sid, cole aqui o seu valor.',
+    'Substack sign-in': 'início de sessão Substack', 'paste': 'colar', 'save': 'guardar', 'colours': 'cores', 'text size — tap for larger, long-press for smaller': 'tamanho do texto — toque para aumentar, prima longamente para reduzir', ' · auto': ' · auto', 'back to the automatic size': 'voltar ao tamanho automático', 'from the screen size': 'a partir do tamanho do ecrã',
+    'serif': 'serif', 'sans-serif': 'sans-serif', 'reading face': 'letra de leitura', 'pages': 'páginas', 'scrolling': 'deslizar', 'lists — pages suit e-ink screens': 'listas — as páginas convêm aos ecrãs e-ink', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'um leitor RSS a preto e branco, nascido do Pluralis. GPL-3.0.',
+    'the text could not be extracted': 'não foi possível extrair o texto', 'larger text': 'texto maior', 'smaller text': 'texto menor', 'fetching the text…': 'a carregar o texto…', 'cancel': 'cancelar', 'ok': 'ok', 'now': 'agora', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 d',
+  },
+  'ru': {
+    'nothing here': 'здесь пусто', 'read': 'читать', 'forget': 'забыть', 'save for later': 'отложить на потом', 'open in the browser': 'открыть в браузере', 'share': 'поделиться', 'saved': 'отложено',
+    'saved for later': 'отложенные', 'nothing saved. Long-press an article to keep it here for 90 days.': 'ничего не отложено. Долгое нажатие на статью сохранит её здесь на 90 дней.',
+    'sources': 'источники', 'refresh': 'обновить', 'order: latest first': 'порядок: сначала новые', 'order: one per source': 'порядок: по одной на источник', 'black on white': 'чёрным по белому', 'white on black': 'белым по чёрному', 'settings': 'настройки',
+    'fetching…': 'загрузка…', 'feeds': 'ленты', '%1 articles · %2 sources': '%1 статей · %2 источников', 'nothing could be fetched. Pull down to try again, or check the sources.': 'ничего не удалось загрузить. Потяните вниз, чтобы повторить, или проверьте источники.',
+    'no source enabled. ⋯ › sources.': 'нет включённых источников. ⋯ › источники.', 'nothing yet. Pull down to refresh.': 'пока пусто. Потяните вниз, чтобы обновить.',
+    'add a feed': 'добавить ленту', 'add a paid Substack': 'добавить платный Substack', 'import OPML': 'импорт OPML', 'export OPML': 'экспорт OPML', 'import Substacks (CSV)': 'импорт Substack (CSV)', 'export Substacks (CSV)': 'экспорт Substack (CSV)',
+    'address of the feed (or of the site)': 'адрес ленты (или сайта)', 'name': 'название', 'address of the publication': 'адрес издания', 'no source in this file': 'в этом файле нет источников', '%1 sources added': 'добавлено источников: %1', 'could not import: %1': 'не удалось импортировать: %1',
+    'no paid Substack to export': 'нет платных Substack для экспорта', 'no Substack in this file': 'в этом файле нет Substack', '%1 Substacks added': 'добавлено Substack: %1', 'disable': 'выключить', 'enable': 'включить', 'articles': 'статьи', 'sign in again': 'войти заново', 'forget the sign-in': 'забыть вход', 'remove': 'удалить',
+    'no source yet. ⋯ › add a feed, or import an OPML file.': 'источников пока нет. ⋯ › добавить ленту или импортировать файл OPML.', 'signed in': 'выполнен вход', 'no answer': 'нет ответа', '+ add a feed': '+ добавить ленту', 'nothing came back from this feed.': 'эта лента ничего не вернула.',
+    'the substack.sid cookie is HttpOnly and cannot be read from the page. In a desktop browser: DevTools › Application › Cookies › substack.sid, paste its value here.': 'cookie substack.sid помечен HttpOnly и не читается со страницы. В настольном браузере: DevTools › Application › Cookies › substack.sid, вставьте его значение сюда.',
+    'Substack sign-in': 'вход в Substack', 'paste': 'вставить', 'save': 'сохранить', 'colours': 'цвета', 'text size — tap for larger, long-press for smaller': 'размер текста — нажмите, чтобы увеличить, удерживайте, чтобы уменьшить', ' · auto': ' · авто', 'back to the automatic size': 'вернуть автоматический размер', 'from the screen size': 'по размеру экрана',
+    'serif': 'с засечками', 'sans-serif': 'без засечек', 'reading face': 'шрифт для чтения', 'pages': 'страницы', 'scrolling': 'прокрутка', 'lists — pages suit e-ink screens': 'списки — страницы подходят для e-ink', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'чёрно-белый RSS-ридер, выросший из Pluralis. GPL-3.0.',
+    'the text could not be extracted': 'не удалось извлечь текст', 'larger text': 'крупнее текст', 'smaller text': 'мельче текст', 'fetching the text…': 'загрузка текста…', 'cancel': 'отмена', 'ok': 'ок', 'now': 'сейчас', '%1 min': '%1 мин', '%1 h': '%1 ч', '%1 d': '%1 д',
+  },
+};

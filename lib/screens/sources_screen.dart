@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import '../ui/l10n.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -18,29 +19,29 @@ class SourcesScreen extends StatelessWidget {
 
   void _menu(BuildContext context) {
     showTextMenu(context, items: [
-      MenuItemText('add a feed', () => _addFeed(context)),
-      MenuItemText('add a paid Substack', () => _addSubstack(context)),
-      MenuItemText('import OPML', () => _importOpml(context)),
-      MenuItemText('export OPML', () => _exportOpml(context)),
-      MenuItemText('import Substacks (CSV)', () => _importCsv(context)),
-      MenuItemText('export Substacks (CSV)', () => _exportCsv(context)),
+      MenuItemText(t('add a feed'), () => _addFeed(context)),
+      MenuItemText(t('add a paid Substack'), () => _addSubstack(context)),
+      MenuItemText(t('import OPML'), () => _importOpml(context)),
+      MenuItemText(t('export OPML'), () => _exportOpml(context)),
+      MenuItemText(t('import Substacks (CSV)'), () => _importCsv(context)),
+      MenuItemText(t('export Substacks (CSV)'), () => _exportCsv(context)),
     ]);
   }
 
   Future<void> _addFeed(BuildContext context) async {
-    final url = await textPrompt(context, 'address of the feed (or of the site)', hint: 'https://…', keyboard: TextInputType.url);
+    final url = await textPrompt(context, t('address of the feed (or of the site)'), hint: 'https://…', keyboard: TextInputType.url);
     if (url == null || url.trim().isEmpty || !context.mounted) return;
     var rss = url.trim();
     if (rss.contains('substack.com') && !rss.endsWith('/feed')) rss = rss.endsWith('/') ? '${rss}feed' : '$rss/feed';
     final host = Uri.tryParse(rss)?.host.replaceAll('www.', '') ?? rss;
-    final name = await textPrompt(context, 'name', initial: host);
+    final name = await textPrompt(context, t('name'), initial: host);
     if (name == null || name.trim().isEmpty || !context.mounted) return;
     final id = name.trim().toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '_');
     context.read<SourceProvider>().addSource(Source(id: id, name: name.trim(), url: rss, rss: rss, category: 'custom', lang: 'EN', isDefault: false));
   }
 
   Future<void> _addSubstack(BuildContext context) async {
-    final url = await textPrompt(context, 'address of the publication', hint: 'https://example.substack.com', keyboard: TextInputType.url);
+    final url = await textPrompt(context, t('address of the publication'), hint: 'https://example.substack.com', keyboard: TextInputType.url);
     if (url == null || url.trim().isEmpty || !context.mounted) return;
     final cookie = await Navigator.push<String>(context, readerRoute(const SubstackLoginScreen()));
     if (cookie == null || !context.mounted) return;
@@ -65,17 +66,17 @@ class SourcesScreen extends StatelessWidget {
     try {
       final sources = ImportExportService().importOpml(await File(path).readAsString());
       if (!context.mounted) return;
-      if (sources.isEmpty) { say(context, 'no source in this file'); return; }
+      if (sources.isEmpty) { say(context, t('no source in this file')); return; }
       await context.read<SourceProvider>().addSources(sources);
-      if (context.mounted) say(context, '${sources.length} sources added');
+      if (context.mounted) say(context, t('%1 sources added', [sources.length]));
     } catch (e) {
-      if (context.mounted) say(context, 'could not import: $e');
+      if (context.mounted) say(context, t('could not import: %1', [e]));
     }
   }
 
   Future<void> _exportCsv(BuildContext context) async {
     final sources = context.read<SourceProvider>().sources;
-    if (!sources.any((s) => s.cookie != null && s.cookie!.isNotEmpty)) { say(context, 'no paid Substack to export'); return; }
+    if (!sources.any((s) => s.cookie != null && s.cookie!.isNotEmpty)) { say(context, t('no paid Substack to export')); return; }
     final service = ImportExportService();
     final tmp = await getTemporaryDirectory();
     final file = await service.writeToTempFile(service.exportSubstackCsv(sources), 'readers_feeds_substacks.csv', tmp.path);
@@ -89,11 +90,11 @@ class SourcesScreen extends StatelessWidget {
     try {
       final sources = ImportExportService().importSubstackCsv(await File(path).readAsString());
       if (!context.mounted) return;
-      if (sources.isEmpty) { say(context, 'no Substack in this file'); return; }
+      if (sources.isEmpty) { say(context, t('no Substack in this file')); return; }
       await context.read<SourceProvider>().addSources(sources);
-      if (context.mounted) say(context, '${sources.length} Substacks added');
+      if (context.mounted) say(context, t('%1 Substacks added', [sources.length]));
     } catch (e) {
-      if (context.mounted) say(context, 'could not import: $e');
+      if (context.mounted) say(context, t('could not import: %1', [e]));
     }
   }
 
@@ -101,14 +102,14 @@ class SourcesScreen extends StatelessWidget {
     final provider = context.read<SourceProvider>();
     final hasCookie = s.cookie != null && s.cookie!.isNotEmpty;
     showTextMenu(context, title: s.name, items: [
-      MenuItemText(s.active ? 'disable' : 'enable', () => provider.toggleSource(s.id)),
-      MenuItemText('articles', () => Navigator.push(context, readerRoute(SourceFeedScreen(source: s)))),
-      if (hasCookie) MenuItemText('sign in again', () async {
+      MenuItemText(s.active ? t('disable') : t('enable'), () => provider.toggleSource(s.id)),
+      MenuItemText(t('articles'), () => Navigator.push(context, readerRoute(SourceFeedScreen(source: s)))),
+      if (hasCookie) MenuItemText(t('sign in again'), () async {
         final cookie = await Navigator.push<String>(context, readerRoute(const SubstackLoginScreen()));
         if (cookie != null) provider.updateSourceCookie(s.id, cookie);
       }),
-      if (hasCookie) MenuItemText('forget the sign-in', () => provider.updateSourceCookie(s.id, null)),
-      MenuItemText('remove', () => provider.removeSource(s.id)),
+      if (hasCookie) MenuItemText(t('forget the sign-in'), () => provider.updateSourceCookie(s.id, null)),
+      MenuItemText(t('remove'), () => provider.removeSource(s.id)),
     ]);
   }
 
@@ -120,10 +121,10 @@ class SourcesScreen extends StatelessWidget {
     final sources = provider.sources;
     return ReaderPage(
       child: Column(children: [
-        ScreenTitle('sources', onBack: () => Navigator.pop(context), trailing: '⋯', onTrailing: () => _menu(context)),
+        ScreenTitle(t('sources'), onBack: () => Navigator.pop(context), trailing: '⋯', onTrailing: () => _menu(context)),
         Expanded(
           child: ListView(padding: const EdgeInsets.only(top: 6, bottom: 32), children: [
-            if (sources.isEmpty) const Padding(padding: EdgeInsets.all(kPadH), child: Small('no source yet. ⋯ › add a feed, or import an OPML file.')),
+            if (sources.isEmpty) Padding(padding: const EdgeInsets.all(kPadH), child: Small(t('no source yet. ⋯ › add a feed, or import an OPML file.'))),
             for (final s in sources)
               Row(children: [
                 GestureDetector(
@@ -141,8 +142,8 @@ class SourcesScreen extends StatelessWidget {
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         T(s.name, size: st.title, color: s.active ? st.fg : st.dim, maxLines: 1),
                         Small([
-                          if (s.cookie != null && s.cookie!.isNotEmpty) 'signed in',
-                          if (s.active && answered.isNotEmpty && !answered.contains(s.id)) 'no answer',
+                          if (s.cookie != null && s.cookie!.isNotEmpty) t('signed in'),
+                          if (s.active && answered.isNotEmpty && !answered.contains(s.id)) t('no answer'),
                           Uri.tryParse(s.rss)?.host.replaceAll('www.', '') ?? s.rss,
                         ].join(' · '), maxLines: 1),
                       ]),
@@ -153,7 +154,7 @@ class SourcesScreen extends StatelessWidget {
           ]),
         ),
         const Rule(),
-        TextRow('+ add a feed', onTap: () => _addFeed(context)),
+        TextRow(t('+ add a feed'), onTap: () => _addFeed(context)),
         SizedBox(height: MediaQuery.of(context).padding.bottom),
       ]),
     );

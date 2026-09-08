@@ -2,6 +2,7 @@
 // foreground, source and age in a dim line under it. Scrolls, or turns pages when the
 // setting says so (e-ink): a fixed number of rows per page, tap the lower/upper half.
 import 'package:flutter/material.dart';
+import '../ui/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,10 +34,10 @@ class _ArticleListState extends State<ArticleList> {
     final bookmarks = context.read<BookmarkProvider>();
     final saved = bookmarks.isBookmarked(a.id);
     showTextMenu(context, title: a.title, items: [
-      MenuItemText('read', () => openArticle(context, a)),
-      MenuItemText(saved ? 'forget' : 'save for later', () => bookmarks.toggle(a)),
-      MenuItemText('open in the browser', () => launchUrl(Uri.parse(a.link), mode: LaunchMode.externalApplication)),
-      MenuItemText('share', () => Share.share('${a.title}\n${a.link}')),
+      MenuItemText(t('read'), () => openArticle(context, a)),
+      MenuItemText(saved ? t('forget') : t('save for later'), () => bookmarks.toggle(a)),
+      MenuItemText(t('open in the browser'), () => launchUrl(Uri.parse(a.link), mode: LaunchMode.externalApplication)),
+      MenuItemText(t('share'), () => Share.share('${a.title}\n${a.link}')),
     ]);
   }
 
@@ -44,7 +45,7 @@ class _ArticleListState extends State<ArticleList> {
     final line = [
       if (widget.showSource) a.sourceName,
       timeAgo(a.publishedAt),
-      if (saved) 'saved',
+      if (saved) t('saved'),
     ].where((s) => s.isNotEmpty).join(' · ');
     return TextRow(a.title, secondary: line.isEmpty ? null : line, onTap: () => openArticle(context, a), onLongPress: () => articleMenu(context, a));
   }
@@ -55,7 +56,7 @@ class _ArticleListState extends State<ArticleList> {
     final bookmarks = context.watch<BookmarkProvider>();
     final paged = context.watch<SettingsProvider>().pagedList;
     if (widget.articles.isEmpty) {
-      return ListView(children: [Padding(padding: const EdgeInsets.all(kPadH), child: Small(widget.empty))]);
+      return ListView(children: [Padding(padding: const EdgeInsets.all(kPadH), child: Small(t(widget.empty)))]);
     }
     if (!paged) {
       final list = ListView.builder(

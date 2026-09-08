@@ -1,6 +1,7 @@
 // The Reader's look, shared by every screen: two colours, one light sans face,
 // text rows separated by hairlines, menus and prompts that are also plain text.
 import 'package:flutter/material.dart';
+import 'l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../providers/settings_provider.dart';
@@ -19,7 +20,7 @@ class ReaderStyle {
   double get small => base - 3; // secondary lines
   double get big => base * 2.2;
   // Explicit face and spacing: the widget and the measuring painter must wrap identically.
-  String get family => serif ? 'serif' : 'Roboto';
+  String get family => serif ? t('serif') : 'Roboto';
 
   TextStyle text(double size, {Color? color, double height = 1.25, FontWeight weight = FontWeight.w300}) =>
       TextStyle(fontSize: size, color: color ?? fg, height: height, fontWeight: weight, fontFamily: family, letterSpacing: 0, wordSpacing: 0, decoration: TextDecoration.none, leadingDistribution: TextLeadingDistribution.even);
@@ -193,7 +194,7 @@ Future<void> showTextMenu(BuildContext context, {String? title, required List<Me
 }
 
 /// A question and a line to type in. Returns null when cancelled.
-Future<String?> textPrompt(BuildContext context, String title, {String initial = '', String hint = '', String ok = 'ok', TextInputType? keyboard, bool obscure = false}) {
+Future<String?> textPrompt(BuildContext context, String title, {String initial = '', String hint = '', String? ok, TextInputType? keyboard, bool obscure = false}) {
   final settings = context.read<SettingsProvider>();
   final ctrl = TextEditingController(text: initial);
   return showDialog<String>(
@@ -226,9 +227,9 @@ Future<String?> textPrompt(BuildContext context, String title, {String initial =
                 onSubmitted: (v) => Navigator.pop(ctx, v),
               ),
               Row(children: [
-                GestureDetector(behavior: HitTestBehavior.opaque, onTap: () => Navigator.pop(ctx), child: Padding(padding: const EdgeInsets.symmetric(vertical: 14), child: T('cancel', size: st.title))),
+                GestureDetector(behavior: HitTestBehavior.opaque, onTap: () => Navigator.pop(ctx), child: Padding(padding: const EdgeInsets.symmetric(vertical: 14), child: T(t('cancel'), size: st.title))),
                 const SizedBox(width: 36),
-                GestureDetector(behavior: HitTestBehavior.opaque, onTap: () => Navigator.pop(ctx, ctrl.text), child: Padding(padding: const EdgeInsets.symmetric(vertical: 14), child: T(ok, size: st.title))),
+                GestureDetector(behavior: HitTestBehavior.opaque, onTap: () => Navigator.pop(ctx, ctrl.text), child: Padding(padding: const EdgeInsets.symmetric(vertical: 14), child: T(ok ?? t('ok'), size: st.title))),
               ]),
             ]),
           ),
@@ -256,12 +257,12 @@ Route<R> readerRoute<R>(Widget page) => PageRouteBuilder<R>(
       reverseTransitionDuration: Duration.zero,
     );
 
-String timeAgo(DateTime? t) {
-  if (t == null) return '';
-  final d = DateTime.now().difference(t);
-  if (d.inMinutes < 1) return 'now';
-  if (d.inMinutes < 60) return '${d.inMinutes} min';
-  if (d.inHours < 24) return '${d.inHours} h';
-  if (d.inDays < 7) return '${d.inDays} d';
-  return '${t.day}.${t.month}.${t.year}';
+String timeAgo(DateTime? time) {
+  if (time == null) return '';
+  final d = DateTime.now().difference(time);
+  if (d.inMinutes < 1) return t('now');
+  if (d.inMinutes < 60) return t('%1 min', [d.inMinutes]);
+  if (d.inHours < 24) return t('%1 h', [d.inHours]);
+  if (d.inDays < 7) return t('%1 d', [d.inDays]);
+  return '${time.day}.${time.month}.${time.year}';
 }

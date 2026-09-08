@@ -1,5 +1,6 @@
 // Home: the latest articles of every enabled source. The ⋯ menu leads everywhere else.
 import 'package:flutter/material.dart';
+import '../ui/l10n.dart';
 import 'package:provider/provider.dart';
 import '../providers/feed_provider.dart';
 import '../providers/settings_provider.dart';
@@ -63,13 +64,13 @@ class _FeedScreenState extends State<FeedScreen> with WidgetsBindingObserver {
     final feed = context.read<FeedProvider>();
     final settings = context.read<SettingsProvider>();
     showTextMenu(context, items: [
-      MenuItemText('sources', () => Navigator.push(context, readerRoute(const SourcesScreen()))),
-      MenuItemText('saved for later', () => Navigator.push(context, readerRoute(const SavedScreen()))),
-      MenuItemText('refresh', () => _refresh()),
-      MenuItemText(feed.viewMode == FeedViewMode.latest ? 'order: latest first' : 'order: one per source', () => feed.toggleViewMode()),
+      MenuItemText(t('sources'), () => Navigator.push(context, readerRoute(const SourcesScreen()))),
+      MenuItemText(t('saved for later'), () => Navigator.push(context, readerRoute(const SavedScreen()))),
+      MenuItemText(t('refresh'), () => _refresh()),
+      MenuItemText(feed.viewMode == FeedViewMode.latest ? t('order: latest first') : t('order: one per source'), () => feed.toggleViewMode()),
     ], footer: [
-      MenuItemText(settings.dark ? 'black on white' : 'white on black', () => settings.toggleDark()),
-      MenuItemText('settings', () => Navigator.push(context, readerRoute(const SettingsScreen()))),
+      MenuItemText(settings.dark ? t('black on white') : t('white on black'), () => settings.toggleDark()),
+      MenuItemText(t('settings'), () => Navigator.push(context, readerRoute(const SettingsScreen()))),
     ]);
   }
 
@@ -80,15 +81,15 @@ class _FeedScreenState extends State<FeedScreen> with WidgetsBindingObserver {
     final st = ReaderStyle.of(context);
     final String title;
     if (feed.isLoading && feed.articles.isEmpty) {
-      title = 'fetching…';
+      title = t('fetching…');
     } else if (feed.articles.isEmpty) {
-      title = 'feeds';
+      title = t('feeds');
     } else {
-      title = '${feed.articles.length} articles · ${feed.sourceCount} sources${feed.isLoading ? ' · …' : ''}';
+      title = t('%1 articles · %2 sources', [feed.articles.length, feed.sourceCount]) + (feed.isLoading ? ' · …' : '');
     }
     final String empty = feed.error != null && feed.articles.isEmpty
-        ? 'nothing could be fetched. Pull down to try again, or check the sources.'
-        : (context.watch<SourceProvider>().activeSources.isEmpty ? 'no source enabled. ⋯ › sources.' : 'nothing yet. Pull down to refresh.');
+        ? t('nothing could be fetched. Pull down to try again, or check the sources.')
+        : (context.watch<SourceProvider>().activeSources.isEmpty ? t('no source enabled. ⋯ › sources.') : t('nothing yet. Pull down to refresh.'));
     return ReaderPage(
       child: Column(children: [
         ScreenTitle(title, trailing: '⋯', onTrailing: _menu, onTitle: () => _refresh()),

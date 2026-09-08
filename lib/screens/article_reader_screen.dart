@@ -1,6 +1,7 @@
 // The article as pages: tap the right half for the next page, the left half for the
 // previous one. Pages are cut at whole lines, never through a line. Title on the first page.
 import 'package:flutter/material.dart';
+import '../ui/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -42,7 +43,7 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
     }
     final ex = await _extractor.extract(a.link);
     if (!mounted) return;
-    setState(() { _loading = false; _extracted = ex; if (ex == null) _error = 'the text could not be extracted'; });
+    setState(() { _loading = false; _extracted = ex; if (ex == null) _error = t('the text could not be extracted'); });
   }
 
   void _paginate(ReaderStyle st, double w, double h) {
@@ -65,14 +66,14 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
     final a = widget.article;
     final saved = bookmarks.isBookmarked(a.id);
     showTextMenu(context, title: a.title, items: [
-      MenuItemText(saved ? 'forget' : 'save for later', () => bookmarks.toggle(a)),
-      MenuItemText('open in the browser', () => launchUrl(Uri.parse(a.link), mode: LaunchMode.externalApplication)),
-      MenuItemText('share', () => Share.share('${a.title}\n${a.link}')),
-      MenuItemText('larger text', () => settings.increaseFontSize()),
-      MenuItemText('smaller text', () => settings.decreaseFontSize()),
-      MenuItemText(settings.serif ? 'sans-serif' : 'serif', () => settings.toggleSerif()),
+      MenuItemText(saved ? t('forget') : t('save for later'), () => bookmarks.toggle(a)),
+      MenuItemText(t('open in the browser'), () => launchUrl(Uri.parse(a.link), mode: LaunchMode.externalApplication)),
+      MenuItemText(t('share'), () => Share.share('${a.title}\n${a.link}')),
+      MenuItemText(t('larger text'), () => settings.increaseFontSize()),
+      MenuItemText(t('smaller text'), () => settings.decreaseFontSize()),
+      MenuItemText(settings.serif ? t('sans-serif') : t('serif'), () => settings.toggleSerif()),
     ], footer: [
-      MenuItemText(settings.dark ? 'black on white' : 'white on black', () => settings.toggleDark()),
+      MenuItemText(settings.dark ? t('black on white') : t('white on black'), () => settings.toggleDark()),
     ]);
   }
 
@@ -85,11 +86,11 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
         ScreenTitle(a.sourceName, onBack: () => Navigator.pop(context), trailing: '⋯', onTrailing: _menu),
         Expanded(
           child: _loading
-              ? const Padding(padding: EdgeInsets.all(kPadH), child: Small('fetching the text…'))
+              ? Padding(padding: const EdgeInsets.all(kPadH), child: Small(t('fetching the text…')))
               : _error != null
                   ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Padding(padding: const EdgeInsets.all(kPadH), child: T(_error!, color: st.dim)),
-                      TextRow('open in the browser', onTap: () => launchUrl(Uri.parse(a.link), mode: LaunchMode.externalApplication)),
+                      TextRow(t('open in the browser'), onTap: () => launchUrl(Uri.parse(a.link), mode: LaunchMode.externalApplication)),
                     ])
                   : _body(st),
         ),

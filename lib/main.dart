@@ -5,9 +5,11 @@ import 'providers/feed_provider.dart';
 import 'providers/bookmark_provider.dart';
 import 'providers/settings_provider.dart';
 import 'screens/feed_screen.dart';
+import 'ui/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  initL10n();
   runApp(
     MultiProvider(
       providers: [
