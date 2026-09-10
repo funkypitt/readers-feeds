@@ -19,6 +19,7 @@ String t(String key, [List<Object> args = const []]) {
 
 const Map<String, Map<String, String>> _tables = {
   'fr': {
+    'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · développé avec Claude Code',
     'nothing here': 'rien ici', 'read': 'lire', 'forget': 'oublier', 'save for later': 'garder pour plus tard', 'open in the browser': 'ouvrir dans le navigateur', 'share': 'partager', 'saved': 'gardé',
     'saved for later': 'gardés pour plus tard', 'nothing saved. Long-press an article to keep it here for 90 days.': 'rien de gardé. Appui long sur un article pour le garder ici 90 jours.',
     'sources': 'sources', 'refresh': 'actualiser', 'order: latest first': 'ordre : les plus récents d’abord', 'order: one per source': 'ordre : un par source', 'black on white': 'noir sur blanc', 'white on black': 'blanc sur noir', 'settings': 'réglages',
@@ -34,6 +35,7 @@ const Map<String, Map<String, String>> _tables = {
     'the text could not be extracted': 'le texte n’a pas pu être extrait', 'larger text': 'texte plus grand', 'smaller text': 'texte plus petit', 'fetching the text…': 'chargement du texte…', 'cancel': 'annuler', 'ok': 'ok', 'now': 'maintenant', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 j',
   },
   'de': {
+    'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · entwickelt mit Claude Code',
     'nothing here': 'nichts hier', 'read': 'lesen', 'forget': 'vergessen', 'save for later': 'für später merken', 'open in the browser': 'im Browser öffnen', 'share': 'teilen', 'saved': 'gemerkt',
     'saved for later': 'für später gemerkt', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nichts gemerkt. Einen Artikel lange drücken, um ihn 90 Tage hier zu behalten.',
     'sources': 'Quellen', 'refresh': 'aktualisieren', 'order: latest first': 'Reihenfolge: neueste zuerst', 'order: one per source': 'Reihenfolge: eine pro Quelle', 'black on white': 'Schwarz auf Weiß', 'white on black': 'Weiß auf Schwarz', 'settings': 'Einstellungen',
@@ -49,6 +51,7 @@ const Map<String, Map<String, String>> _tables = {
     'the text could not be extracted': 'der Text konnte nicht ausgelesen werden', 'larger text': 'größerer Text', 'smaller text': 'kleinerer Text', 'fetching the text…': 'lade den Text…', 'cancel': 'abbrechen', 'ok': 'ok', 'now': 'jetzt', '%1 min': '%1 Min', '%1 h': '%1 Std', '%1 d': '%1 T',
   },
   'es': {
+    'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · desarrollado con Claude Code',
     'nothing here': 'nada aquí', 'read': 'leer', 'forget': 'olvidar', 'save for later': 'guardar para después', 'open in the browser': 'abrir en el navegador', 'share': 'compartir', 'saved': 'guardado',
     'saved for later': 'guardados para después', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nada guardado. Mantén pulsado un artículo para guardarlo aquí 90 días.',
     'sources': 'fuentes', 'refresh': 'actualizar', 'order: latest first': 'orden: más recientes primero', 'order: one per source': 'orden: uno por fuente', 'black on white': 'negro sobre blanco', 'white on black': 'blanco sobre negro', 'settings': 'ajustes',
@@ -64,6 +67,7 @@ const Map<String, Map<String, String>> _tables = {
     'the text could not be extracted': 'no se pudo extraer el texto', 'larger text': 'texto más grande', 'smaller text': 'texto más pequeño', 'fetching the text…': 'cargando el texto…', 'cancel': 'cancelar', 'ok': 'ok', 'now': 'ahora', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 d',
   },
   'pt': {
+    'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · desenvolvido com Claude Code',
     'nothing here': 'nada aqui', 'read': 'ler', 'forget': 'esquecer', 'save for later': 'guardar para depois', 'open in the browser': 'abrir no navegador', 'share': 'partilhar', 'saved': 'guardado',
     'saved for later': 'guardados para depois', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nada guardado. Prima longamente um artigo para o guardar aqui 90 dias.',
     'sources': 'fontes', 'refresh': 'atualizar', 'order: latest first': 'ordem: mais recentes primeiro', 'order: one per source': 'ordem: um por fonte', 'black on white': 'preto sobre branco', 'white on black': 'branco sobre preto', 'settings': 'definições',
@@ -79,6 +83,7 @@ const Map<String, Map<String, String>> _tables = {
     'the text could not be extracted': 'não foi possível extrair o texto', 'larger text': 'texto maior', 'smaller text': 'texto menor', 'fetching the text…': 'a carregar o texto…', 'cancel': 'cancelar', 'ok': 'ok', 'now': 'agora', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 d',
   },
   'ru': {
+    'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · разработано с Claude Code',
     'nothing here': 'здесь пусто', 'read': 'читать', 'forget': 'забыть', 'save for later': 'отложить на потом', 'open in the browser': 'открыть в браузере', 'share': 'поделиться', 'saved': 'отложено',
     'saved for later': 'отложенные', 'nothing saved. Long-press an article to keep it here for 90 days.': 'ничего не отложено. Долгое нажатие на статью сохранит её здесь на 90 дней.',
     'sources': 'источники', 'refresh': 'обновить', 'order: latest first': 'порядок: сначала новые', 'order: one per source': 'порядок: по одной на источник', 'black on white': 'чёрным по белому', 'white on black': 'белым по чёрному', 'settings': 'настройки',

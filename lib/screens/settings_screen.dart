@@ -21,6 +21,7 @@ class SettingsScreen extends StatelessWidget {
             TextRow(s.pagedList ? t('pages') : t('scrolling'), secondary: t('lists — pages suit e-ink screens'), onTap: s.togglePagedList),
             const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Rule()),
             TextRow("Reader's Feeds", secondary: t('a black-and-white RSS reader, born from Pluralis. GPL-3.0.'), maxLines: 1, secondaryLines: 3),
+            TextRow(t('Pierre Gallaz · developed with Claude Code'), dim: true),
           ]),
         ),
       ]),

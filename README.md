@@ -38,3 +38,13 @@ release. Build: `flutter pub get && flutter build apk --release`.
 ## Licence
 
 GPL-3.0, as Pluralis.
+
+## Crédits / Credits
+
+Basé sur / Based on [Pluralis](https://github.com/funkypitt/pluralis) by Pierre Gallaz, GPL-3.0. Voir / see `NOTICE.md`.
+
+© 2026 Pierre Gallaz. Développé avec [Claude Code](https://claude.com/claude-code) (Anthropic).
+Licence GPL-3.0, voir `LICENSE`.
+
+© 2026 Pierre Gallaz. Developed with [Claude Code](https://claude.com/claude-code) (Anthropic).
+GPL-3.0 licence, see `LICENSE`.

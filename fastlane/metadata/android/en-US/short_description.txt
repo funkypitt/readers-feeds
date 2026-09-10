@@ -1,0 +1,1 @@
+Black-and-white, text-only RSS and Atom reader made for e-ink screens

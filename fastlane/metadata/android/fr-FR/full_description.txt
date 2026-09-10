@@ -1,0 +1,13 @@
+Reader's Feeds est un lecteur RSS et Atom en noir et blanc, texte seul, pour Android, de la famille de Reader's Launcher, Reader's Tasks et Reader's Calendar. Né de Pluralis, dont il garde le chargement, l'extraction et la pagination ; tout ce que l'on voit a été redessiné.
+
+Une seule liste : les derniers articles de vos sources, titre en noir, source et ancienneté en gris. Toucher pour lire l'article en pages, extrait de la page web et coupé à la ligne entière : la moitié droite de l'écran tourne en avant, la moitié gauche en arrière. Appui long sur un article pour le garder pour plus tard, l'ouvrir dans le navigateur ou le partager. Le menu mène aux sources, aux articles gardés, aux réglages, et passe en blanc sur noir. Pas d'icônes, pas de couleurs, pas de cartes.
+
+Sources : n'importe quel flux RSS ou Atom. Les publications Substack payantes fonctionnent après connexion (le cookie reste sur l'appareil). Import et export OPML, et un CSV de vos Substacks avec leurs cookies, pour que la liste voyage entre appareils.
+
+E-ink : tout est en deux couleurs et sans animation. Dans les réglages, « pages » fait tourner les listes en pages au lieu de défiler. La police de lecture peut être serif. La taille du texte part de la taille de l'écran et peut être poussée dans les deux sens.
+
+Widget d'écran d'accueil : les derniers titres en liste simple, la source sous chacun ; toucher pour l'ouvrir.
+
+Basé sur Pluralis, GPL-3.0.
+
+Pierre Gallaz · développé avec Claude Code

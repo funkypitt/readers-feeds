@@ -1,0 +1,1 @@
+Lecteur RSS et Atom en noir et blanc, texte seul, pensé pour les écrans e-ink
