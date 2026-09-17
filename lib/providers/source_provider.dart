@@ -42,6 +42,24 @@ class SourceProvider extends ChangeNotifier {
     }
   }
 
+  /// Paid Substacks from a credentials file: a publication already here takes the cookie, a new
+  /// one is added. Returns how many sign-ins were applied.
+  Future<int> applySubstackSignIns(List<Source> incoming) async {
+    var n = 0;
+    for (final s in incoming) {
+      final i = _sources.indexWhere((x) => x.rss == s.rss || x.id == s.id);
+      if (i >= 0) {
+        _sources[i].cookie = s.cookie;
+      } else {
+        _sources.add(s);
+      }
+      n++;
+    }
+    await _service.saveSources(_sources);
+    await load();
+    return n;
+  }
+
   /// Add multiple sources at once (used by OPML/CSV import)
   Future<void> addSources(List<Source> newSources) async {
     final existingIds = _sources.map((s) => s.id).toSet();
