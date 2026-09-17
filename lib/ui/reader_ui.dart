@@ -147,7 +147,8 @@ class ReaderPage extends StatelessWidget {
         systemNavigationBarColor: st.bg,
         systemNavigationBarIconBrightness: st.bg == Colors.black ? Brightness.light : Brightness.dark,
       ),
-      child: Material(color: st.bg, child: SafeArea(bottom: false, child: child)),
+      // a Scaffold, so that say() has somewhere to show its line
+      child: Scaffold(backgroundColor: st.bg, resizeToAvoidBottomInset: false, body: SafeArea(bottom: false, child: child)),
     );
   }
 }
