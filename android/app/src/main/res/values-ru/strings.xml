@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_description">Свежие статьи из ваших RSS-лент</string>
+    <string name="widget_title">ленты</string>
+    <string name="widget_open">открыть ›</string>
+    <string name="widget_empty">пока пусто</string>
+</resources>

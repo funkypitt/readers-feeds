@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_description">Los últimos artículos de tus feeds RSS</string>
+    <string name="widget_title">feeds</string>
+    <string name="widget_open">abrir ›</string>
+    <string name="widget_empty">nada todavía</string>
+</resources>
