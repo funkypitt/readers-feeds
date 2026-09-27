@@ -47,11 +47,11 @@ Future<void> importCredentials(BuildContext context) async {
     final incoming = readCredentials(await File(path).readAsString());
     if (!context.mounted) return;
     final n = await context.read<SourceProvider>().applySubstackSignIns(incoming);
-    if (context.mounted) say(context, t('%1 Substack sign-ins imported', [n]));
+    if (context.mounted) say(context, tn('%1 Substack sign-ins imported', n));
   } on CredentialsError catch (e) {
     if (context.mounted) say(context, e.kind == 'foreign' ? t("not a Reader's credentials file") : t('this file holds nothing for %1', ["Reader's Feeds"]));
-  } catch (e) {
-    if (context.mounted) say(context, t('could not import: %1', [e]));
+  } catch (_) {
+    if (context.mounted) say(context, t('could not read this file'));
   }
 }
 

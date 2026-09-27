@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="widget_description">Latest articles from your RSS feeds</string>
+    <string name="widget_title">feeds</string>
+    <string name="widget_open">open ›</string>
+    <string name="widget_empty">nothing yet</string>
 </resources>

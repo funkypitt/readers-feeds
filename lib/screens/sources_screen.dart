@@ -68,9 +68,9 @@ class SourcesScreen extends StatelessWidget {
       if (!context.mounted) return;
       if (sources.isEmpty) { say(context, t('no source in this file')); return; }
       await context.read<SourceProvider>().addSources(sources);
-      if (context.mounted) say(context, t('%1 sources added', [sources.length]));
-    } catch (e) {
-      if (context.mounted) say(context, t('could not import: %1', [e]));
+      if (context.mounted) say(context, tn('%1 sources added', sources.length));
+    } catch (_) {
+      if (context.mounted) say(context, t('could not read this file'));
     }
   }
 
@@ -92,9 +92,9 @@ class SourcesScreen extends StatelessWidget {
       if (!context.mounted) return;
       if (sources.isEmpty) { say(context, t('no Substack in this file')); return; }
       await context.read<SourceProvider>().addSources(sources);
-      if (context.mounted) say(context, t('%1 Substacks added', [sources.length]));
-    } catch (e) {
-      if (context.mounted) say(context, t('could not import: %1', [e]));
+      if (context.mounted) say(context, tn('%1 Substacks added', sources.length));
+    } catch (_) {
+      if (context.mounted) say(context, t('could not read this file'));
     }
   }
 

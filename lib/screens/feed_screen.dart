@@ -85,7 +85,7 @@ class _FeedScreenState extends State<FeedScreen> with WidgetsBindingObserver {
     } else if (feed.articles.isEmpty) {
       title = t('feeds');
     } else {
-      title = t('%1 articles · %2 sources', [feed.articles.length, feed.sourceCount]) + (feed.isLoading ? ' · …' : '');
+      title = '${tn('%1 articles', feed.articles.length)} · ${tn('%1 sources', feed.sourceCount)}${feed.isLoading ? ' · …' : ''}';
     }
     final String empty = feed.error != null && feed.articles.isEmpty
         ? t('nothing could be fetched. Pull down to try again, or check the sources.')
