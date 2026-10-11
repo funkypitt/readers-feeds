@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import '../ui/l10n.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import '../models/source.dart';
 import '../providers/feed_provider.dart';
 import '../providers/source_provider.dart';
 import '../services/import_export_service.dart';
+import '../ui/export_flow.dart';
 import '../ui/reader_ui.dart';
 import 'source_feed_screen.dart';
 import 'substack_login_screen.dart';
@@ -53,10 +52,7 @@ class SourcesScreen extends StatelessWidget {
 
   Future<void> _exportOpml(BuildContext context) async {
     final sources = context.read<SourceProvider>().sources;
-    final service = ImportExportService();
-    final tmp = await getTemporaryDirectory();
-    final file = await service.writeToTempFile(service.exportOpml(sources), 'readers_feeds.opml', tmp.path);
-    await Share.shareXFiles([XFile(file.path)]);
+    await saveThenOfferShare(context, name: 'readers-feeds-subscriptions.opml', text: ImportExportService().exportOpml(sources), mime: 'text/x-opml');
   }
 
   Future<void> _importOpml(BuildContext context) async {
@@ -77,10 +73,7 @@ class SourcesScreen extends StatelessWidget {
   Future<void> _exportCsv(BuildContext context) async {
     final sources = context.read<SourceProvider>().sources;
     if (!sources.any((s) => s.cookie != null && s.cookie!.isNotEmpty)) { say(context, t('no paid Substack to export')); return; }
-    final service = ImportExportService();
-    final tmp = await getTemporaryDirectory();
-    final file = await service.writeToTempFile(service.exportSubstackCsv(sources), 'readers_feeds_substacks.csv', tmp.path);
-    await Share.shareXFiles([XFile(file.path)]);
+    await saveThenOfferShare(context, name: 'readers-feeds-substacks.csv', text: ImportExportService().exportSubstackCsv(sources), mime: 'text/csv');
   }
 
   Future<void> _importCsv(BuildContext context) async {

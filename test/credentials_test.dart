@@ -16,6 +16,9 @@ void main() {
     expect(list.length, 1);
     expect(list.first, {'name': 'paid', 'url': 'https://paid.substack.com', 'rss': 'https://paid.substack.com/feed', 'cookie': 's%3Aabc'});
   });
+  test('export name: the app, then what the file holds', () {
+    expect(credentialsFileName, 'readers-feeds-credentials.json');
+  });
   test('build: nothing to export', () {
     expect(buildCredentials([src('free')]), isNull);
   });

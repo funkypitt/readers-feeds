@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '../ui/l10n.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import '../providers/settings_provider.dart';
 import '../providers/source_provider.dart';
 import '../services/credentials_service.dart';
+import '../ui/export_flow.dart';
 import '../ui/reader_ui.dart';
 
 /// Leftover credentials files in the cache (they hold the sign-ins): removed at start and before a
@@ -19,7 +19,7 @@ Future<void> clearCredentialsCache() async {
       final d = Directory('${tmp.path}/$name');
       if (await d.exists()) {
         await for (final f in d.list()) {
-          if (f is File && f.path.split('/').last.startsWith('readers-credentials')) await f.delete();
+          if (f is File && f.path.split('/').last.contains('credentials')) await f.delete();
         }
       }
     }
@@ -30,12 +30,8 @@ Future<void> exportCredentials(BuildContext context) async {
   final text = buildCredentials(context.read<SourceProvider>().sources);
   if (text == null) { say(context, t('no paid Substack to export')); return; }
   await clearCredentialsCache();
-  final tmp = await getTemporaryDirectory();
-  final dir = Directory('${tmp.path}/credentials');
-  await dir.create(recursive: true);
-  final file = File('${dir.path}/readers-credentials-feeds.json');
-  await file.writeAsString(text);
-  await Share.shareXFiles([XFile(file.path, mimeType: 'application/json', name: 'readers-credentials-feeds.json')],
+  if (!context.mounted) return;
+  await saveThenOfferShare(context, name: credentialsFileName, text: text, mime: 'application/json', cacheDir: 'credentials',
       subject: t("Reader's Feeds credentials — the file holds your Substack sign-ins: keep it private"));
 }
 

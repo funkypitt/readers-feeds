@@ -6,6 +6,8 @@ import '../models/source.dart';
 
 const credentialsFormat = 'readers-credentials';
 const credentialsSection = 'readers-feeds';
+/// The name the export proposes: the app that exports, then what the file holds.
+const credentialsFileName = 'readers-feeds-credentials.json';
 
 class CredentialsError implements Exception {
   /// 'foreign' (not a credentials file) or 'missing' (no section for this app).

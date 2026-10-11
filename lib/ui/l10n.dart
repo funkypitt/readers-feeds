@@ -60,6 +60,7 @@ const Map<String, Map<String, String>> _tables = {
     'Substack sign-in': 'connexion Substack', 'paste': 'coller', 'save': 'enregistrer', 'colours': 'couleurs', 'text size — tap for larger, long-press for smaller': 'taille du texte — toucher pour agrandir, appui long pour réduire', ' · auto': ' · auto', 'back to the automatic size': 'revenir à la taille automatique', 'from the screen size': 'd’après la taille de l’écran',
     'serif': 'serif', 'sans-serif': 'sans-serif', 'reading face': 'police de lecture', 'pages': 'pages', 'scrolling': 'défilement', 'lists — pages suit e-ink screens': 'listes — les pages conviennent aux écrans e-ink', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'un lecteur RSS en noir et blanc, né de Pluralis. GPL-3.0.',
     'the text could not be extracted': 'le texte n’a pas pu être extrait', 'larger text': 'texte plus grand', 'smaller text': 'texte plus petit', 'fetching the text…': 'chargement du texte…', 'cancel': 'annuler', 'ok': 'ok', 'now': 'maintenant', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 j',
+    'saved as %1': 'enregistré sous %1', 'share this file…': 'partager ce fichier…',
   },
   'de': {
     'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · entwickelt mit Claude Code',
@@ -77,6 +78,7 @@ const Map<String, Map<String, String>> _tables = {
     'Substack sign-in': 'Substack-Anmeldung', 'paste': 'einfügen', 'save': 'speichern', 'colours': 'Farben', 'text size — tap for larger, long-press for smaller': 'Textgröße — antippen für größer, lange drücken für kleiner', ' · auto': ' · auto', 'back to the automatic size': 'zurück zur automatischen Größe', 'from the screen size': 'aus der Bildschirmgröße',
     'serif': 'Serif', 'sans-serif': 'Sans-Serif', 'reading face': 'Leseschrift', 'pages': 'Seiten', 'scrolling': 'Scrollen', 'lists — pages suit e-ink screens': 'Listen — Seiten passen zu E-Ink-Bildschirmen', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'ein schwarz-weißer RSS-Reader, aus Pluralis entstanden. GPL-3.0.',
     'the text could not be extracted': 'der Text konnte nicht ausgelesen werden', 'larger text': 'größerer Text', 'smaller text': 'kleinerer Text', 'fetching the text…': 'lade den Text…', 'cancel': 'abbrechen', 'ok': 'ok', 'now': 'jetzt', '%1 min': '%1 Min', '%1 h': '%1 Std', '%1 d': '%1 T',
+    'saved as %1': 'gespeichert als %1', 'share this file…': 'diese Datei teilen…',
   },
   'es': {
     'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · desarrollado con Claude Code',
@@ -94,6 +96,7 @@ const Map<String, Map<String, String>> _tables = {
     'Substack sign-in': 'inicio de sesión Substack', 'paste': 'pegar', 'save': 'guardar', 'colours': 'colores', 'text size — tap for larger, long-press for smaller': 'tamaño del texto — toca para agrandar, mantén pulsado para reducir', ' · auto': ' · auto', 'back to the automatic size': 'volver al tamaño automático', 'from the screen size': 'según el tamaño de la pantalla',
     'serif': 'serif', 'sans-serif': 'sans-serif', 'reading face': 'fuente de lectura', 'pages': 'páginas', 'scrolling': 'desplazamiento', 'lists — pages suit e-ink screens': 'listas — las páginas van bien en pantallas e-ink', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'un lector RSS en blanco y negro, nacido de Pluralis. GPL-3.0.',
     'the text could not be extracted': 'no se pudo extraer el texto', 'larger text': 'texto más grande', 'smaller text': 'texto más pequeño', 'fetching the text…': 'cargando el texto…', 'cancel': 'cancelar', 'ok': 'ok', 'now': 'ahora', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 d',
+    'saved as %1': 'guardado como %1', 'share this file…': 'compartir este archivo…',
   },
   'pt': {
     'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · desenvolvido com Claude Code',
@@ -111,6 +114,7 @@ const Map<String, Map<String, String>> _tables = {
     'Substack sign-in': 'início de sessão Substack', 'paste': 'colar', 'save': 'guardar', 'colours': 'cores', 'text size — tap for larger, long-press for smaller': 'tamanho do texto — toque para aumentar, prima longamente para reduzir', ' · auto': ' · auto', 'back to the automatic size': 'voltar ao tamanho automático', 'from the screen size': 'a partir do tamanho do ecrã',
     'serif': 'serif', 'sans-serif': 'sans-serif', 'reading face': 'letra de leitura', 'pages': 'páginas', 'scrolling': 'deslizar', 'lists — pages suit e-ink screens': 'listas — as páginas convêm aos ecrãs e-ink', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'um leitor RSS a preto e branco, nascido do Pluralis. GPL-3.0.',
     'the text could not be extracted': 'não foi possível extrair o texto', 'larger text': 'texto maior', 'smaller text': 'texto menor', 'fetching the text…': 'a carregar o texto…', 'cancel': 'cancelar', 'ok': 'ok', 'now': 'agora', '%1 min': '%1 min', '%1 h': '%1 h', '%1 d': '%1 d',
+    'saved as %1': 'guardado como %1', 'share this file…': 'partilhar este ficheiro…',
   },
   'ru': {
     'Pierre Gallaz · developed with Claude Code': 'Pierre Gallaz · разработано с Claude Code',
@@ -128,5 +132,6 @@ const Map<String, Map<String, String>> _tables = {
     'Substack sign-in': 'вход в Substack', 'paste': 'вставить', 'save': 'сохранить', 'colours': 'цвета', 'text size — tap for larger, long-press for smaller': 'размер текста — нажмите, чтобы увеличить, удерживайте, чтобы уменьшить', ' · auto': ' · авто', 'back to the automatic size': 'вернуть автоматический размер', 'from the screen size': 'по размеру экрана',
     'serif': 'с засечками', 'sans-serif': 'без засечек', 'reading face': 'шрифт для чтения', 'pages': 'страницы', 'scrolling': 'прокрутка', 'lists — pages suit e-ink screens': 'списки — страницы подходят для e-ink', 'a black-and-white RSS reader, born from Pluralis. GPL-3.0.': 'чёрно-белый RSS-ридер, выросший из Pluralis. GPL-3.0.',
     'the text could not be extracted': 'не удалось извлечь текст', 'larger text': 'крупнее текст', 'smaller text': 'мельче текст', 'fetching the text…': 'загрузка текста…', 'cancel': 'отмена', 'ok': 'ок', 'now': 'сейчас', '%1 min': '%1 мин', '%1 h': '%1 ч', '%1 d': '%1 д',
+    'saved as %1': 'сохранено как %1', 'share this file…': 'поделиться этим файлом…',
   },
 };
