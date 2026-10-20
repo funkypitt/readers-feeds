@@ -1,5 +1,6 @@
-// The Reader's look, shared by every screen: two colours, one light sans face,
-// text rows separated by hairlines, menus and prompts that are also plain text.
+// The Reader's look, shared by every screen: a background, a text colour and an accent for the
+// inverted rows, one light sans face, text rows separated by hairlines, menus and prompts that
+// are also plain text.
 import 'package:flutter/material.dart';
 import 'l10n.dart';
 import 'package:flutter/services.dart';
@@ -9,12 +10,17 @@ import '../providers/settings_provider.dart';
 class ReaderStyle {
   final Color bg;
   final Color fg;
+  /// Fills the inverted rows (the text colour itself in the two inks); [onAccent] is written on it.
+  final Color accent;
+  final Color onAccent;
   final double base; // the reading size; everything else derives from it
   final bool serif;
-  const ReaderStyle({required this.bg, required this.fg, required this.base, required this.serif});
+  const ReaderStyle({required this.bg, required this.fg, required this.accent, required this.onAccent, required this.base, required this.serif});
 
   Color get dim => fg.withValues(alpha: 0.55);
   Color get rule => fg.withValues(alpha: 0.25);
+  /// From the background's luminance: the status-bar icons depend on it.
+  bool get isDark => bg.computeLuminance() < 0.5;
   double get tile => base + 8; // menu entries
   double get title => base + 3; // article titles, screen titles
   double get small => base - 3; // secondary lines
@@ -27,9 +33,12 @@ class ReaderStyle {
 
   static ReaderStyle of(BuildContext context) {
     final s = context.watch<SettingsProvider>();
+    final p = s.palette;
     return ReaderStyle(
-      bg: s.dark ? Colors.black : Colors.white,
-      fg: s.dark ? Colors.white : Colors.black,
+      bg: p.bg,
+      fg: p.fg,
+      accent: p.accent,
+      onAccent: p.onAccent,
       base: s.fontSize,
       serif: s.serif,
     );
@@ -88,18 +97,18 @@ class TextRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final st = ReaderStyle.of(context);
-    final fg = inverted ? st.bg : (dim ? st.dim : st.fg);
+    final fg = inverted ? st.onAccent : (dim ? st.dim : st.fg);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       onLongPress: onLongPress,
       child: Container(
         width: double.infinity,
-        color: inverted ? st.fg : null,
+        color: inverted ? st.accent : null,
         padding: const EdgeInsets.symmetric(horizontal: kPadH, vertical: kPadV * 0.7),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           T(text, size: size ?? st.title, color: fg, maxLines: maxLines),
-          if (secondary != null) T(secondary!, size: st.small, color: inverted ? st.bg.withValues(alpha: 0.7) : st.dim, maxLines: secondaryLines),
+          if (secondary != null) T(secondary!, size: st.small, color: inverted ? st.onAccent.withValues(alpha: 0.7) : st.dim, maxLines: secondaryLines),
         ]),
       ),
     );
@@ -143,9 +152,9 @@ class ReaderPage extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: st.bg == Colors.black ? Brightness.light : Brightness.dark,
+        statusBarIconBrightness: st.isDark ? Brightness.light : Brightness.dark,
         systemNavigationBarColor: st.bg,
-        systemNavigationBarIconBrightness: st.bg == Colors.black ? Brightness.light : Brightness.dark,
+        systemNavigationBarIconBrightness: st.isDark ? Brightness.light : Brightness.dark,
       ),
       // a Scaffold, so that say() has somewhere to show its line
       child: Scaffold(backgroundColor: st.bg, resizeToAvoidBottomInset: false, body: SafeArea(bottom: false, child: child)),
@@ -166,7 +175,7 @@ Future<void> showTextMenu(BuildContext context, {String? title, required List<Me
   return showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,
-    barrierColor: (settings.dark ? Colors.black : Colors.white).withValues(alpha: 0.6),
+    barrierColor: settings.palette.bg.withValues(alpha: 0.6),
     isScrollControlled: true,
     builder: (ctx) => ChangeNotifierProvider.value(
       value: settings,
@@ -200,7 +209,7 @@ Future<String?> textPrompt(BuildContext context, String title, {String initial =
   final ctrl = TextEditingController(text: initial);
   return showDialog<String>(
     context: context,
-    barrierColor: (settings.dark ? Colors.black : Colors.white).withValues(alpha: 0.6),
+    barrierColor: settings.palette.bg.withValues(alpha: 0.6),
     builder: (ctx) => ChangeNotifierProvider.value(
       value: settings,
       child: Builder(builder: (ctx) {
@@ -240,12 +249,12 @@ Future<String?> textPrompt(BuildContext context, String title, {String initial =
   );
 }
 
-/// Word-of-mouth feedback instead of a snackbar.
+/// Word-of-mouth feedback instead of a snackbar: an inverted line, in the accent.
 void say(BuildContext context, String text) {
   final st = ReaderStyle.of(context);
   ScaffoldMessenger.maybeOf(context)?.showSnackBar(SnackBar(
-    content: Text(text, style: st.text(st.small, color: st.bg)),
-    backgroundColor: st.fg,
+    content: Text(text, style: st.text(st.small, color: st.onAccent)),
+    backgroundColor: st.accent,
     behavior: SnackBarBehavior.floating,
     shape: const RoundedRectangleBorder(),
     duration: const Duration(seconds: 3),

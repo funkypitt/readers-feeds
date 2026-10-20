@@ -7,7 +7,7 @@
     android:paddingStart="14dp"
     android:paddingEnd="14dp"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="0dp">
 
     <TextView
         android:id="@+id/item_title"
@@ -29,5 +29,13 @@
         android:layout_marginTop="2dp"
         android:maxLines="1"
         android:ellipsize="end" />
+
+    <!-- the hairline under the row: the divider of a ListView cannot take the theme's colour -->
+    <View
+        android:id="@+id/item_rule"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#40000000" />
 
 </LinearLayout>

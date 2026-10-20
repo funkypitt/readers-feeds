@@ -8,6 +8,7 @@ import '../providers/settings_provider.dart';
 import '../providers/source_provider.dart';
 import '../services/credentials_service.dart';
 import '../ui/export_flow.dart';
+import '../ui/palettes.dart';
 import '../ui/reader_ui.dart';
 
 /// Leftover credentials files in the cache (they hold the sign-ins): removed at start and before a
@@ -61,7 +62,7 @@ class SettingsScreen extends StatelessWidget {
         ScreenTitle(t('settings'), onBack: () => Navigator.pop(context)),
         Expanded(
           child: ListView(padding: const EdgeInsets.only(top: 6, bottom: 32), children: [
-            TextRow(s.dark ? t('white on black') : t('black on white'), secondary: t('colours'), onTap: s.toggleDark),
+            TextRow(themeName(s.theme), secondary: t('colours'), onTap: s.nextTheme),
             TextRow('${s.fontSize.toInt()}${s.fontSizeIsAuto ? t(' · auto') : ''}', secondary: t('text size — tap for larger, long-press for smaller'), onTap: s.increaseFontSize, onLongPress: s.decreaseFontSize),
             TextRow(t('back to the automatic size'), secondary: t('from the screen size'), onTap: () => s.resetFontSize(context)),
             TextRow(s.serif ? t('serif') : t('sans-serif'), secondary: t('reading face'), onTap: s.toggleSerif),

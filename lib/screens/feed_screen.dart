@@ -1,6 +1,7 @@
 // Home: the latest articles of every enabled source. The ⋯ menu leads everywhere else.
 import 'package:flutter/material.dart';
 import '../ui/l10n.dart';
+import '../ui/palettes.dart';
 import 'package:provider/provider.dart';
 import '../providers/feed_provider.dart';
 import '../providers/settings_provider.dart';
@@ -69,7 +70,7 @@ class _FeedScreenState extends State<FeedScreen> with WidgetsBindingObserver {
       MenuItemText(t('refresh'), () => _refresh()),
       MenuItemText(feed.viewMode == FeedViewMode.latest ? t('order: latest first') : t('order: one per source'), () => feed.toggleViewMode()),
     ], footer: [
-      MenuItemText(settings.dark ? t('black on white') : t('white on black'), () => settings.toggleDark()),
+      MenuItemText(themeName(nextThemeAfter(settings.theme)), () => settings.nextTheme()),
       MenuItemText(t('settings'), () => Navigator.push(context, readerRoute(const SettingsScreen()))),
     ]);
   }

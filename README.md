@@ -12,7 +12,7 @@ pagination it keeps; in the family of [Reader's Launcher](https://github.com/fun
 * One list: the latest articles, title in black, source and age in grey. Tap to read; the right
   half of the screen turns forward, the left half back.
 * Long press an article to save it for later, open it in the browser or share it. The ⋯ menu
-  leads to the sources, the saved articles, the settings, and flips white on black.
+  leads to the sources, the saved articles, the settings, and moves to the next colour theme.
 * Sources: any RSS or Atom feed. Tap the box to enable or disable one, its name for its own
   articles, long press for the rest.
 * Paid Substack publications work after signing in; the cookie stays on the device.
@@ -20,6 +20,8 @@ pagination it keeps; in the family of [Reader's Launcher](https://github.com/fun
   with their cookies.
 * E-ink: two colours, no animation. Settings › "pages" makes the lists turn pages instead of
   scrolling. Serif reading face; text size set from the settings or the reader's menu.
+* Colour themes: black on white, white on black, then the palettes of the Plume keyboard
+  (lavender, sage, nordic, terracotta, coquette, activist, sultry, nature); the widget follows.
 * Home-screen widget: the latest titles as a plain list, source under each; tap one to open it.
 
 ## Install

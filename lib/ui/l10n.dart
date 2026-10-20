@@ -50,6 +50,8 @@ const Map<String, Map<String, String>> _tables = {
     'nothing here': 'rien ici', 'read': 'lire', 'forget': 'oublier', 'save for later': 'garder pour plus tard', 'open in the browser': 'ouvrir dans le navigateur', 'share': 'partager', 'saved': 'gardé',
     'saved for later': 'gardés pour plus tard', 'nothing saved. Long-press an article to keep it here for 90 days.': 'rien de gardé. Appui long sur un article pour le garder ici 90 jours.',
     'sources': 'sources', 'refresh': 'actualiser', 'order: latest first': 'ordre : les plus récents d’abord', 'order: one per source': 'ordre : un par source', 'black on white': 'noir sur blanc', 'white on black': 'blanc sur noir', 'settings': 'réglages',
+    // the colour themes after the two inks
+    'lavender': 'lavande', 'sage': 'sauge', 'nordic': 'nordique', 'terracotta': 'terracotta', 'coquette': 'coquette', 'activist': 'militante', 'sultry': 'torride', 'nature': 'nature',
     'fetching…': 'chargement…', 'feeds': 'flux', '%1 articles|one': '%1 article', '%1 articles': '%1 articles', '%1 sources|one': '%1 source', '%1 sources': '%1 sources', 'nothing could be fetched. Pull down to try again, or check the sources.': 'rien n’a pu être chargé. Tirer vers le bas pour réessayer, ou vérifier les sources.',
     'no source enabled. ⋯ › sources.': 'aucune source activée. ⋯ › sources.', 'nothing yet. Pull down to refresh.': 'rien pour l’instant. Tirer vers le bas pour actualiser.',
     'add a feed': 'ajouter un flux', 'add a paid Substack': 'ajouter un Substack payant', 'import OPML': 'importer un OPML', 'export OPML': 'exporter en OPML', 'import Substacks (CSV)': 'importer des Substacks (CSV)', 'export Substacks (CSV)': 'exporter les Substacks (CSV)',
@@ -68,6 +70,8 @@ const Map<String, Map<String, String>> _tables = {
     'nothing here': 'nichts hier', 'read': 'lesen', 'forget': 'vergessen', 'save for later': 'für später merken', 'open in the browser': 'im Browser öffnen', 'share': 'teilen', 'saved': 'gemerkt',
     'saved for later': 'für später gemerkt', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nichts gemerkt. Einen Artikel lange drücken, um ihn 90 Tage hier zu behalten.',
     'sources': 'Quellen', 'refresh': 'aktualisieren', 'order: latest first': 'Reihenfolge: neueste zuerst', 'order: one per source': 'Reihenfolge: eine pro Quelle', 'black on white': 'Schwarz auf Weiß', 'white on black': 'Weiß auf Schwarz', 'settings': 'Einstellungen',
+    // the colour themes after the two inks
+    'lavender': 'Lavendel', 'sage': 'Salbei', 'nordic': 'nordisch', 'terracotta': 'Terrakotta', 'coquette': 'kokett', 'activist': 'kämpferisch', 'sultry': 'glühend', 'nature': 'Natur',
     'fetching…': 'lade…', 'feeds': 'Feeds', '%1 articles': '%1 Artikel', '%1 sources|one': '%1 Quelle', '%1 sources': '%1 Quellen', 'nothing could be fetched. Pull down to try again, or check the sources.': 'nichts konnte geladen werden. Nach unten ziehen, um es erneut zu versuchen, oder die Quellen prüfen.',
     'no source enabled. ⋯ › sources.': 'keine Quelle aktiv. ⋯ › Quellen.', 'nothing yet. Pull down to refresh.': 'noch nichts. Nach unten ziehen zum Aktualisieren.',
     'add a feed': 'Feed hinzufügen', 'add a paid Substack': 'bezahlten Substack hinzufügen', 'import OPML': 'OPML importieren', 'export OPML': 'OPML exportieren', 'import Substacks (CSV)': 'Substacks importieren (CSV)', 'export Substacks (CSV)': 'Substacks exportieren (CSV)',
@@ -86,6 +90,8 @@ const Map<String, Map<String, String>> _tables = {
     'nothing here': 'nada aquí', 'read': 'leer', 'forget': 'olvidar', 'save for later': 'guardar para después', 'open in the browser': 'abrir en el navegador', 'share': 'compartir', 'saved': 'guardado',
     'saved for later': 'guardados para después', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nada guardado. Mantén pulsado un artículo para guardarlo aquí 90 días.',
     'sources': 'fuentes', 'refresh': 'actualizar', 'order: latest first': 'orden: más recientes primero', 'order: one per source': 'orden: uno por fuente', 'black on white': 'negro sobre blanco', 'white on black': 'blanco sobre negro', 'settings': 'ajustes',
+    // the colour themes after the two inks
+    'lavender': 'lavanda', 'sage': 'salvia', 'nordic': 'nórdico', 'terracotta': 'terracota', 'coquette': 'coqueta', 'activist': 'militante', 'sultry': 'tórrido', 'nature': 'naturaleza',
     'fetching…': 'cargando…', 'feeds': 'feeds', '%1 articles|one': '%1 artículo', '%1 articles': '%1 artículos', '%1 sources|one': '%1 fuente', '%1 sources': '%1 fuentes', 'nothing could be fetched. Pull down to try again, or check the sources.': 'no se pudo cargar nada. Desliza hacia abajo para reintentar, o revisa las fuentes.',
     'no source enabled. ⋯ › sources.': 'ninguna fuente activada. ⋯ › fuentes.', 'nothing yet. Pull down to refresh.': 'nada todavía. Desliza hacia abajo para actualizar.',
     'add a feed': 'añadir un feed', 'add a paid Substack': 'añadir un Substack de pago', 'import OPML': 'importar OPML', 'export OPML': 'exportar OPML', 'import Substacks (CSV)': 'importar Substacks (CSV)', 'export Substacks (CSV)': 'exportar Substacks (CSV)',
@@ -104,6 +110,8 @@ const Map<String, Map<String, String>> _tables = {
     'nothing here': 'nada aqui', 'read': 'ler', 'forget': 'esquecer', 'save for later': 'guardar para depois', 'open in the browser': 'abrir no navegador', 'share': 'partilhar', 'saved': 'guardado',
     'saved for later': 'guardados para depois', 'nothing saved. Long-press an article to keep it here for 90 days.': 'nada guardado. Prima longamente um artigo para o guardar aqui 90 dias.',
     'sources': 'fontes', 'refresh': 'atualizar', 'order: latest first': 'ordem: mais recentes primeiro', 'order: one per source': 'ordem: um por fonte', 'black on white': 'preto sobre branco', 'white on black': 'branco sobre preto', 'settings': 'definições',
+    // the colour themes after the two inks
+    'lavender': 'lavanda', 'sage': 'sálvia', 'nordic': 'nórdico', 'terracotta': 'terracota', 'coquette': 'coquete', 'activist': 'militante', 'sultry': 'tórrido', 'nature': 'natureza',
     'fetching…': 'a carregar…', 'feeds': 'feeds', '%1 articles|one': '%1 artigo', '%1 articles': '%1 artigos', '%1 sources|one': '%1 fonte', '%1 sources': '%1 fontes', 'nothing could be fetched. Pull down to try again, or check the sources.': 'nada pôde ser carregado. Puxe para baixo para tentar de novo, ou verifique as fontes.',
     'no source enabled. ⋯ › sources.': 'nenhuma fonte ativa. ⋯ › fontes.', 'nothing yet. Pull down to refresh.': 'nada ainda. Puxe para baixo para atualizar.',
     'add a feed': 'adicionar um feed', 'add a paid Substack': 'adicionar um Substack pago', 'import OPML': 'importar OPML', 'export OPML': 'exportar OPML', 'import Substacks (CSV)': 'importar Substacks (CSV)', 'export Substacks (CSV)': 'exportar Substacks (CSV)',
@@ -122,6 +130,8 @@ const Map<String, Map<String, String>> _tables = {
     'nothing here': 'здесь пусто', 'read': 'читать', 'forget': 'забыть', 'save for later': 'отложить на потом', 'open in the browser': 'открыть в браузере', 'share': 'поделиться', 'saved': 'отложено',
     'saved for later': 'отложенные', 'nothing saved. Long-press an article to keep it here for 90 days.': 'ничего не отложено. Долгое нажатие на статью сохранит её здесь на 90 дней.',
     'sources': 'источники', 'refresh': 'обновить', 'order: latest first': 'порядок: сначала новые', 'order: one per source': 'порядок: по одной на источник', 'black on white': 'чёрным по белому', 'white on black': 'белым по чёрному', 'settings': 'настройки',
+    // the colour themes after the two inks
+    'lavender': 'лаванда', 'sage': 'шалфей', 'nordic': 'северный', 'terracotta': 'терракота', 'coquette': 'кокетка', 'activist': 'активистка', 'sultry': 'знойный', 'nature': 'природа',
     'fetching…': 'загрузка…', 'feeds': 'ленты', '%1 articles|one': '%1 статья', '%1 articles|few': '%1 статьи', '%1 articles': '%1 статей', '%1 sources|one': '%1 источник', '%1 sources|few': '%1 источника', '%1 sources': '%1 источников', 'nothing could be fetched. Pull down to try again, or check the sources.': 'ничего не удалось загрузить. Потяните вниз, чтобы повторить, или проверьте источники.',
     'no source enabled. ⋯ › sources.': 'нет включённых источников. ⋯ › источники.', 'nothing yet. Pull down to refresh.': 'пока пусто. Потяните вниз, чтобы обновить.',
     'add a feed': 'добавить ленту', 'add a paid Substack': 'добавить платный Substack', 'import OPML': 'импорт OPML', 'export OPML': 'экспорт OPML', 'import Substacks (CSV)': 'импорт Substack (CSV)', 'export Substacks (CSV)': 'экспорт Substack (CSV)',

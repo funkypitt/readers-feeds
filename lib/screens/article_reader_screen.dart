@@ -2,6 +2,7 @@
 // previous one. Pages are cut at whole lines, never through a line. Title on the first page.
 import 'package:flutter/material.dart';
 import '../ui/l10n.dart';
+import '../ui/palettes.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -73,7 +74,7 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
       MenuItemText(t('smaller text'), () => settings.decreaseFontSize()),
       MenuItemText(settings.serif ? t('sans-serif') : t('serif'), () => settings.toggleSerif()),
     ], footer: [
-      MenuItemText(settings.dark ? t('black on white') : t('white on black'), () => settings.toggleDark()),
+      MenuItemText(themeName(nextThemeAfter(settings.theme)), () => settings.nextTheme()),
     ]);
   }
 

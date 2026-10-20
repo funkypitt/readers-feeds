@@ -30,9 +30,10 @@ class ReadersFeedsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = context.watch<SettingsProvider>().dark;
-    final bg = dark ? Colors.black : Colors.white;
-    final fg = dark ? Colors.white : Colors.black;
+    final p = context.watch<SettingsProvider>().palette;
+    final dark = p.isDark;
+    final bg = p.bg;
+    final fg = p.fg;
     return MaterialApp(
       title: "Reader's Feeds",
       debugShowCheckedModeBanner: false,
@@ -41,7 +42,7 @@ class ReadersFeedsApp extends StatelessWidget {
         brightness: dark ? Brightness.dark : Brightness.light,
         scaffoldBackgroundColor: bg,
         canvasColor: bg,
-        colorScheme: ColorScheme.fromSeed(seedColor: fg, brightness: dark ? Brightness.dark : Brightness.light, surface: bg, onSurface: fg, primary: fg, onPrimary: bg),
+        colorScheme: ColorScheme.fromSeed(seedColor: p.accent, brightness: dark ? Brightness.dark : Brightness.light, surface: bg, onSurface: fg, primary: p.accent, onPrimary: p.onAccent),
         fontFamily: null,
         splashFactory: NoSplash.splashFactory,
         highlightColor: Colors.transparent,

@@ -24,6 +24,7 @@ private class ArticleRemoteViewsFactory(
     )
 
     private var articles = listOf<WidgetArticle>()
+    private var palette = Palettes.of(null)
 
     override fun onCreate() {
         loadData()
@@ -45,6 +46,9 @@ private class ArticleRemoteViewsFactory(
 
         views.setTextViewText(R.id.item_title, article.title)
         views.setTextViewText(R.id.item_source, article.sourceName)
+        views.setTextColor(R.id.item_title, palette.fg)
+        views.setTextColor(R.id.item_source, Palettes.dim(palette.fg))
+        views.setInt(R.id.item_rule, "setBackgroundColor", Palettes.rule(palette.fg))
 
         // Fill-in intent for click handling — merged with the template
         val fillInIntent = Intent().apply {
@@ -64,6 +68,7 @@ private class ArticleRemoteViewsFactory(
     override fun hasStableIds(): Boolean = false
 
     private fun loadData() {
+        palette = Palettes.current(context)
         // Flutter's shared_preferences stores in "FlutterSharedPreferences"
         // with keys prefixed by "flutter."
         val prefs = context.getSharedPreferences(

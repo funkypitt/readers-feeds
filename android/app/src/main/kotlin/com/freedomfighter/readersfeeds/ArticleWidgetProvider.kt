@@ -46,6 +46,14 @@ class ArticleWidgetProvider : AppWidgetProvider() {
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
 
+        // The app's colour theme: background and text, as in the app
+        val p = Palettes.current(context)
+        views.setInt(R.id.widget_root, "setBackgroundColor", p.bg)
+        views.setInt(R.id.widget_header, "setBackgroundColor", p.bg)
+        views.setTextColor(R.id.widget_header_title, Palettes.dim(p.fg))
+        views.setTextColor(R.id.widget_header_open, p.fg)
+        views.setTextColor(R.id.widget_empty, Palettes.dim(p.fg))
+
         // Set up the RemoteViews adapter for the ListView
         val serviceIntent = Intent(context, ArticleWidgetService::class.java).apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
