@@ -1,6 +1,7 @@
 // The Reader's look, shared by every screen: a background, a text colour and an accent for the
 // inverted rows, one light sans face, text rows separated by hairlines, menus and prompts that
-// are also plain text.
+// are also plain text. With a colour palette, the rows, menus and prompts become rounded cards
+// (tiles); the two inks stay text on the page.
 import 'package:flutter/material.dart';
 import 'l10n.dart';
 import 'package:flutter/services.dart';
@@ -13,15 +14,21 @@ class ReaderStyle {
   /// Fills the inverted rows (the text colour itself in the two inks); [onAccent] is written on it.
   final Color accent;
   final Color onAccent;
+  /// The card under a tappable row, a second dimmer surface, the card while the finger is on
+  /// it; the inks have none ([tiles] false: text on the page).
+  final Color tile;
+  final Color tile2;
+  final Color press;
+  final bool tiles;
   final double base; // the reading size; everything else derives from it
   final bool serif;
-  const ReaderStyle({required this.bg, required this.fg, required this.accent, required this.onAccent, required this.base, required this.serif});
+  const ReaderStyle({required this.bg, required this.fg, required this.accent, required this.onAccent, required this.tile, required this.tile2, required this.press, required this.tiles, required this.base, required this.serif});
 
   Color get dim => fg.withValues(alpha: 0.55);
   Color get rule => fg.withValues(alpha: 0.25);
   /// From the background's luminance: the status-bar icons depend on it.
   bool get isDark => bg.computeLuminance() < 0.5;
-  double get tile => base + 8; // menu entries
+  double get menu => base + 8; // menu entries
   double get title => base + 3; // article titles, screen titles
   double get small => base - 3; // secondary lines
   double get big => base * 2.2;
@@ -39,6 +46,10 @@ class ReaderStyle {
       fg: p.fg,
       accent: p.accent,
       onAccent: p.onAccent,
+      tile: p.tile,
+      tile2: p.tile2,
+      press: p.press,
+      tiles: p.tiles,
       base: s.fontSize,
       serif: s.serif,
     );
@@ -47,6 +58,36 @@ class ReaderStyle {
 
 const double kPadH = 28;
 const double kPadV = 18;
+
+/// Tiles: the margin around a card, its corner.
+const double kTileGap = 12;
+const double kTileCorner = 18;
+
+/// True inside a sheet or a card: the rows in it are flat, the card is the surface.
+class InTile extends InheritedWidget {
+  const InTile({super.key, required super.child});
+  static bool of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<InTile>() != null;
+  @override
+  bool updateShouldNotify(InTile oldWidget) => false;
+}
+
+/// The card of a hand-made tappable block (not a TextRow): margin, rounded corners, surface;
+/// nothing in the inks, nothing inside a sheet.
+class TileCard extends StatelessWidget {
+  final Widget child;
+  final Color? color;
+  final double vertical;
+  const TileCard({super.key, required this.child, this.color, this.vertical = 4});
+  @override
+  Widget build(BuildContext context) {
+    final st = ReaderStyle.of(context);
+    if (!st.tiles || InTile.of(context)) return child;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: kTileGap, vertical: vertical),
+      child: ClipRRect(borderRadius: BorderRadius.circular(kTileCorner), child: ColoredBox(color: color ?? st.tile, child: child)),
+    );
+  }
+}
 
 class T extends StatelessWidget {
   final String text;
@@ -76,14 +117,20 @@ class Small extends StatelessWidget {
   }
 }
 
+/// Hairline rule in the foreground colour; with tiles, the rows are set apart by space instead.
 class Rule extends StatelessWidget {
   const Rule({super.key});
   @override
-  Widget build(BuildContext context) => Container(height: 1, color: ReaderStyle.of(context).rule);
+  Widget build(BuildContext context) {
+    final st = ReaderStyle.of(context);
+    if (st.tiles) return const SizedBox(height: 4);
+    return Container(height: 1, color: st.rule);
+  }
 }
 
 /// One line of text you can tap, with an optional dim second line. Inverted = selected.
-class TextRow extends StatelessWidget {
+/// With tiles, a rounded card on the page (flat inside a sheet), the press colour under the finger.
+class TextRow extends StatefulWidget {
   final String text;
   final String? secondary;
   final bool inverted;
@@ -95,22 +142,47 @@ class TextRow extends StatelessWidget {
   final VoidCallback? onLongPress;
   const TextRow(this.text, {super.key, this.secondary, this.inverted = false, this.dim = false, this.size, this.maxLines = 2, this.secondaryLines = 1, this.onTap, this.onLongPress});
   @override
+  State<TextRow> createState() => _TextRowState();
+}
+
+class _TextRowState extends State<TextRow> {
+  bool _pressed = false;
+  void _press(bool v) { if (_pressed != v) setState(() => _pressed = v); }
+
+  @override
   Widget build(BuildContext context) {
     final st = ReaderStyle.of(context);
-    final fg = inverted ? st.onAccent : (dim ? st.dim : st.fg);
+    final inverted = widget.inverted;
+    final tappable = widget.onTap != null || widget.onLongPress != null;
+    final inTile = InTile.of(context);
+    final card = st.tiles && !inTile;
+    final fg = inverted ? st.onAccent : (widget.dim ? st.dim : st.fg);
+    final Color? bg = inverted ? st.accent : (st.tiles && _pressed && tappable) ? st.press : (card ? st.tile : null);
+    // a card: outer margin, rounded, then the same text inset as the page's free text
+    Widget body = Container(
+      width: double.infinity,
+      color: bg,
+      padding: EdgeInsets.symmetric(horizontal: card ? kPadH - kTileGap : kPadH, vertical: kPadV * 0.7),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        T(widget.text, size: widget.size ?? st.title, color: fg, maxLines: widget.maxLines),
+        if (widget.secondary != null) T(widget.secondary!, size: st.small, color: inverted ? st.onAccent.withValues(alpha: 0.7) : st.dim, maxLines: widget.secondaryLines),
+      ]),
+    );
+    if (card) {
+      body = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kTileGap, vertical: 4),
+        child: ClipRRect(borderRadius: BorderRadius.circular(kTileCorner), child: body),
+      );
+    }
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Container(
-        width: double.infinity,
-        color: inverted ? st.accent : null,
-        padding: const EdgeInsets.symmetric(horizontal: kPadH, vertical: kPadV * 0.7),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          T(text, size: size ?? st.title, color: fg, maxLines: maxLines),
-          if (secondary != null) T(secondary!, size: st.small, color: inverted ? st.onAccent.withValues(alpha: 0.7) : st.dim, maxLines: secondaryLines),
-        ]),
-      ),
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+      onTapDown: st.tiles && tappable ? (_) => _press(true) : null,
+      onTapUp: st.tiles && tappable ? (_) => _press(false) : null,
+      onTapCancel: st.tiles && tappable ? () => _press(false) : null,
+      onLongPressEnd: st.tiles && tappable ? (_) => _press(false) : null,
+      child: body,
     );
   }
 }
@@ -181,16 +253,24 @@ Future<void> showTextMenu(BuildContext context, {String? title, required List<Me
       value: settings,
       child: Builder(builder: (ctx) {
         final st = ReaderStyle.of(ctx);
-        return Container(
-          decoration: BoxDecoration(color: st.bg, border: Border(top: BorderSide(color: st.fg, width: 1))),
+        final tiles = st.tiles;
+        // tiles: a rounded card in the tile colour, its rows flat; the inks: the page with a rule on top
+        final sheet = Container(
+          decoration: tiles
+              ? BoxDecoration(color: st.tile, borderRadius: const BorderRadius.vertical(top: Radius.circular(28)))
+              : BoxDecoration(color: st.bg, border: Border(top: BorderSide(color: st.fg, width: 1))),
+          clipBehavior: tiles ? Clip.antiAlias : Clip.none,
           child: SafeArea(
             top: false,
             child: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                if (tiles) const SizedBox(height: 10),
                 if (title != null) Padding(padding: const EdgeInsets.fromLTRB(kPadH, kPadV, kPadH, 4), child: T(title, size: st.small, color: st.dim, maxLines: 2)),
-                for (final it in items) TextRow(it.text, size: st.tile, inverted: it.inverted, maxLines: 1, onTap: () { Navigator.pop(ctx); it.onTap(); }),
+                for (final it in items) TextRow(it.text, size: st.menu, inverted: it.inverted, maxLines: 1, onTap: () { Navigator.pop(ctx); it.onTap(); }),
                 if (footer.isNotEmpty) ...[
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Rule()),
+                  // tiles: a hairline in the pressed colour, where the inks draw a rule
+                  if (tiles) ...[if (items.isNotEmpty) Padding(padding: const EdgeInsets.symmetric(horizontal: kPadH, vertical: 6), child: Container(height: 1, color: st.press))]
+                  else const Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Rule()),
                   for (final it in footer) TextRow(it.text, size: st.title, dim: true, maxLines: 1, onTap: () { Navigator.pop(ctx); it.onTap(); }),
                 ],
                 const SizedBox(height: 12),
@@ -198,6 +278,7 @@ Future<void> showTextMenu(BuildContext context, {String? title, required List<Me
             ),
           ),
         );
+        return InTile(child: tiles ? Padding(padding: const EdgeInsets.symmetric(horizontal: kTileGap), child: sheet) : sheet);
       }),
     ),
   );
@@ -214,9 +295,12 @@ Future<String?> textPrompt(BuildContext context, String title, {String initial =
       value: settings,
       child: Builder(builder: (ctx) {
         final st = ReaderStyle.of(ctx);
-        return Dialog(
-          backgroundColor: st.bg,
-          shape: RoundedRectangleBorder(side: BorderSide(color: st.fg), borderRadius: BorderRadius.zero),
+        // tiles: a rounded card in the tile colour; the inks: the page framed by a hairline
+        return InTile(child: Dialog(
+          backgroundColor: st.tiles ? st.tile : st.bg,
+          shape: st.tiles
+              ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(28))
+              : RoundedRectangleBorder(side: BorderSide(color: st.fg), borderRadius: BorderRadius.zero),
           insetPadding: const EdgeInsets.all(20),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(kPadH, kPadV, kPadH, 8),
@@ -243,7 +327,7 @@ Future<String?> textPrompt(BuildContext context, String title, {String initial =
               ]),
             ]),
           ),
-        );
+        ));
       }),
     ),
   );

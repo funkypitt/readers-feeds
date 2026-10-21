@@ -1,0 +1,1 @@
+With a colour theme, the rows, menus and prompts become rounded cards, set apart by space instead of rules; the finger shows the pressed colour. White on black and black on white stay as they were: text on the page.

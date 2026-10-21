@@ -68,7 +68,8 @@ class _ArticleListState extends State<ArticleList> {
     }
     // Paged: rows of a fixed height (two title lines + one small line) so a page is a page.
     return LayoutBuilder(builder: (ctx, c) {
-      final rowH = (st.title * 1.25 * 2 + st.small * 1.25 + kPadV * 1.4);
+      // with tiles, the card's margin (4 above, 4 below) comes on top of the text
+      final rowH = (st.title * 1.25 * 2 + st.small * 1.25 + kPadV * 1.4) + (st.tiles ? 8 : 0);
       final footer = st.small * 1.25 + 24;
       final perPage = ((c.maxHeight - footer) / rowH).floor().clamp(1, 50);
       final pages = (widget.articles.length / perPage).ceil();

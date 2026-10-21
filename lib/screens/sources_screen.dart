@@ -118,12 +118,13 @@ class SourcesScreen extends StatelessWidget {
         Expanded(
           child: ListView(padding: const EdgeInsets.only(top: 6, bottom: 32), children: [
             if (sources.isEmpty) Padding(padding: const EdgeInsets.all(kPadH), child: Small(t('no source yet. ⋯ › add a feed, or import an OPML file.'))),
+            // a source: the box enables it, the name opens it (long-press: its menu); a card with tiles
             for (final s in sources)
-              Row(children: [
+              TileCard(child: Row(children: [
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () => provider.toggleSource(s.id),
-                  child: Padding(padding: const EdgeInsets.only(left: kPadH, right: 14, top: 12, bottom: 12), child: T(s.active ? '■' : '□', size: st.title, color: s.active ? st.fg : st.dim)),
+                  child: Padding(padding: EdgeInsets.only(left: st.tiles ? kPadH - kTileGap : kPadH, right: 14, top: 12, bottom: 12), child: T(s.active ? '■' : '□', size: st.title, color: s.active ? st.fg : st.dim)),
                 ),
                 Expanded(
                   child: GestureDetector(
@@ -131,7 +132,7 @@ class SourcesScreen extends StatelessWidget {
                     onTap: () => Navigator.push(context, readerRoute(SourceFeedScreen(source: s))),
                     onLongPress: () => _sourceMenu(context, s),
                     child: Padding(
-                      padding: const EdgeInsets.only(right: kPadH, top: 12, bottom: 12),
+                      padding: EdgeInsets.only(right: st.tiles ? kPadH - kTileGap : kPadH, top: 12, bottom: 12),
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         T(s.name, size: st.title, color: s.active ? st.fg : st.dim, maxLines: 1),
                         Small([
@@ -143,7 +144,7 @@ class SourcesScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              ]),
+              ])),
           ]),
         ),
         const Rule(),

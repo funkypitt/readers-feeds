@@ -16,6 +16,15 @@ void main() {
       expect((p.accent.computeLuminance() - p.onAccent.computeLuminance()).abs() > 0.3, isTrue, reason: p.name);
     }
   });
+  test('the two inks are text on the page, every palette brings tiles', () {
+    expect(paletteOf('dark').tiles, isFalse);
+    expect(paletteOf('light').tiles, isFalse);
+    for (final p in kPalettes.where((p) => p.tiles)) {
+      expect(p.tile, isNot(p.bg), reason: p.name);
+      expect(p.press, isNot(p.tile), reason: p.name);
+      expect((p.tile.computeLuminance() - p.fg.computeLuminance()).abs() > 0.3, isTrue, reason: p.name);
+    }
+  });
   test('an unknown name falls back to the default, and never breaks the cycle', () {
     expect(paletteOf('bogus').name, kDefaultTheme);
     expect(isTheme('bogus'), isFalse);
